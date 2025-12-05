@@ -11,78 +11,98 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $products = [
+            //product 1
             [
-                'name' => 'Laptop Gaming RX',
-                'category_id' => 1, // Elektronik
-                'price' => 12000000,
-                'stock' => 5,
-            ],
-            [
-                'name' => 'Smartphone Z Pro',
+                'name'        => 'Gaun Satin Aurora',
                 'category_id' => 1,
-                'price' => 4500000,
-                'stock' => 10,
+                'price'       => 650000,
+                'stock'       => 8,
+                'weight'      => 600,
             ],
             [
-                'name' => 'Kaos Oversize Unisex',
-                'category_id' => 2, // Fashion
-                'price' => 120000,
-                'stock' => 30,
+                'name'        => 'Dress Pleats Midnight Blue',
+                'category_id' => 1,
+                'price'       => 720000,
+                'stock'       => 6,
+                'weight'      => 650,
             ],
+
+            //product 2
             [
-                'name' => 'Jaket Hoodie Tebal',
+                'name'        => 'Blouse Chiffon Ivory',
                 'category_id' => 2,
-                'price' => 250000,
-                'stock' => 20,
+                'price'       => 285000,
+                'stock'       => 20,
+                'weight'      => 300,
             ],
             [
-                'name' => 'Lipstick Matte',
-                'category_id' => 3, // Kecantikan
-                'price' => 75000,
-                'stock' => 50,
+                'name'        => 'Kemeja Linen Soft',
+                'category_id' => 2,
+                'price'       => 310000,
+                'stock'       => 15,
+                'weight'      => 320,
             ],
+
+            //product 3
             [
-                'name' => 'Facial Wash Bright',
+                'name'        => 'Rok Plisket Mocha',
                 'category_id' => 3,
-                'price' => 55000,
-                'stock' => 40,
+                'price'       => 260000,
+                'stock'       => 18,
+                'weight'      => 350,
             ],
             [
-                'name' => 'Keripik Pedas Level 5',
-                'category_id' => 4, // Makanan & Minuman
-                'price' => 20000,
-                'stock' => 100,
+                'name'        => 'Wide Leg Pants Charcoal',
+                'category_id' => 3,
+                'price'       => 340000,
+                'stock'       => 12,
+                'weight'      => 400,
             ],
+
+            //product 4
             [
-                'name' => 'Kopi Susu Literan',
+                'name'        => 'Blazer Classic Almond',
                 'category_id' => 4,
-                'price' => 38000,
-                'stock' => 25,
+                'price'       => 480000,
+                'stock'       => 10,
+                'weight'      => 700,
             ],
             [
-                'name' => 'Set Piring Keramik',
-                'category_id' => 5, // Perlengkapan Rumah
-                'price' => 150000,
-                'stock' => 15,
+                'name'        => 'Trench Coat',
+                'category_id' => 4,
+                'price'       => 890000,
+                'stock'       => 5,
+                'weight'      => 900,
             ],
+
+            //product 5
             [
-                'name' => 'Sapu Microfiber',
+                'name'        => 'Set Hijab Pashmina Silk Rose',
                 'category_id' => 5,
-                'price' => 45000,
-                'stock' => 40,
+                'price'       => 230000,
+                'stock'       => 25,
+                'weight'      => 250,
+            ],
+            [
+                'name'        => 'Scarf Hand Painted',
+                'category_id' => 5,
+                'price'       => 185000,
+                'stock'       => 30,
+                'weight'      => 200,
             ],
         ];
 
         foreach ($products as $item) {
             Product::create([
-                'store_id'            => 1, // toko pertama
+                'store_id'            => 1,
                 'product_category_id' => $item['category_id'],
                 'name'                => $item['name'],
                 'slug'                => Str::slug($item['name']),
-                'description'         => $item['name'] . ' dari toko Member Satu.',
+                'description'         => $item['name'] . ' dari koleksi butik elegan.',
+                'condition'           => 'new',
                 'price'               => $item['price'],
+                'weight'              => $item['weight'],
                 'stock'               => $item['stock'],
-                'is_active'           => true,
             ]);
         }
     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
+use App\Models\Product;
 
 
 Route::get('/', function () {
@@ -70,5 +71,12 @@ Route::middleware('auth')->group(function () {
         });
 });
 
+Route::get('/test-products', function () {
+    $products = Product::with(['productImages' => function ($q) {
+        $q->where('is_thumbnail', 1);
+    }])->get();
+
+    return view('test-products', compact('products'));
+});
 
 require __DIR__.'/auth.php';
