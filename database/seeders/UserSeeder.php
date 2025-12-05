@@ -10,28 +10,33 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin
-        User::create([
-            'name' => 'Admin UAP',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
         // Member 1
-        User::create([
-            'name' => 'Member Satu',
-            'email' => 'member1@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'member',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'member1@example.com'],
+            [
+                'name' => 'Member Satu',
+                'password' => Hash::make('password'),
+                'role' => 'member',
+            ]
+        );
 
         // Member 2
-        User::create([
-            'name' => 'Member Dua',
-            'email' => 'member2@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'member',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'member2@example.com'],
+            [
+                'name' => 'Member Dua',
+                'password' => Hash::make('password'),
+                'role' => 'member',
+            ]
+        );
     }
 }
