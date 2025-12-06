@@ -21,6 +21,8 @@ class Transaction extends Model
         'tax',
         'grand_total',
         'payment_status',
+        'va_code',
+        'payment_type',
     ];
 
     protected $casts = [
@@ -31,8 +33,9 @@ class Transaction extends Model
 
     public function buyer()
     {
-        return $this->belongsTo(Buyer::class);
+        return $this->belongsTo(User::class, 'buyer_id');
     }
+
     public function store()
     {
         return $this->belongsTo(Store::class);
@@ -42,8 +45,13 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionDetail::class);
     }
+
     public function productReviews()
     {
         return $this->hasMany(ProductReview::class);
     }
+
+    // helpers
+    public function isPaid()     { return $this->payment_status === 'paid'; }
+    public function isPending()  { return $this->payment_status === 'pending'; }
 }

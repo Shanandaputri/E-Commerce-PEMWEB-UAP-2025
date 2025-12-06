@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Models\Store;
 use App\Models\UserBalance;
+use App\Models\Transaction;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -36,7 +34,7 @@ class User extends Authenticatable
         ];
     }
 
-    // Helper methods
+    // Helpers
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -49,19 +47,24 @@ class User extends Authenticatable
 
     public function isSeller()
     {
-        $store = $this->store;
-
-        return $store && $store->is_verified;
+        return $this->role === 'member'
+            && $this->store
+            && $this->store->is_verified;
     }
 
+    // Relations
     public function store()
     {
         return $this->hasOne(Store::class);
     }
 
-    // Wallet / saldo user
     public function balance()
     {
         return $this->hasOne(UserBalance::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'buyer_id');
     }
 }

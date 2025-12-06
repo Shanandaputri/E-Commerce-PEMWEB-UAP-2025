@@ -13,9 +13,8 @@ class RoleMiddleware
      *
      * @param  array<string>  ...$roles
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        // harus login
         if (!auth()->check()) {
             return redirect()->route('login');
         }
@@ -23,9 +22,10 @@ class RoleMiddleware
         $userRole = auth()->user()->role;
 
         if (!in_array($userRole, $roles)) {
-            abort(403, 'Unauthorized');
+            return redirect()->route('home')
+                ->with('error', 'Kamu tidak punya akses ke halaman ini.');
         }
 
         return $next($request);
-    }
+}
 }

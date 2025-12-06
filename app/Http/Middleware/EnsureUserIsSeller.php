@@ -10,25 +10,30 @@ class EnsureUserIsSeller
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // harus login dulu
         if (!auth()->check()) {
             return redirect()->route('login');
         }
 
         $user = auth()->user();
 
-        // harus role member
+        // Step 1: harus role member
         if ($user->role !== 'member') {
-            abort(403, 'Hanya member yang boleh jadi seller.');
+            abort(403, 'Hanya member yang boleh menjadi seller.');
         }
 
-        // harus punya store
+        // Step 2: harus punya store
         if (!$user->store) {
-            // nanti bisa diarahkan ke halaman register store
             return redirect()->route('store.register')
                 ->with('error', 'Kamu belum punya toko, daftar toko dulu.');
         }
 
+        // Step 3: store harus sudah diverifikasi admin
+        if (!$user->store->is_verified) {
+            return redirect()->route('customer.dashboard')
+                ->with('error', 'Toko kamu belum diverifikasi admin.');
+        }
+
         return $next($request);
     }
+
 }

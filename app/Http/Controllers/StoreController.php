@@ -34,8 +34,8 @@ class StoreController extends Controller
         // Cegah user bikin toko lebih dari satu
         if ($user->store) {
             return redirect()
-                ->route('seller.dashboard')
-                ->with('status', 'Kamu sudah memiliki toko.');
+            ->route('customer.dashboard')
+            ->with('status', 'Kamu sudah memiliki toko.');
         }
 
         // Validasi input
@@ -74,7 +74,7 @@ class StoreController extends Controller
         ]);
 
         return redirect()
-            ->route('seller.dashboard') // nanti ganti ke view seller beneran
-            ->with('status', 'Toko berhasil didaftarkan, menunggu verifikasi admin.');
+        ->route('customer.dashboard')
+        ->with('status', 'Toko berhasil didaftarkan, menunggu verifikasi admin.');
     }
 }

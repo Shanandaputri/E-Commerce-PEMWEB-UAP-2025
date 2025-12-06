@@ -3,22 +3,33 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
 use App\Models\Product;
-
+use App\Models\ProductCategory;
+use App\Http\Controllers\Seller\ProductController as SellerProductController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $categories = ProductCategory::all();
+    $products = Product::with(['productImages' => function ($q) {
+        $q->where('is_thumbnail', 1);
+    }])->paginate(12);
+
+    return view('home', compact('products', 'categories'));
 })->name('home');
 
 // AUTO-REDIRECT DASHBOARD
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
-    return match ($user->role) {
-        'admin'  => redirect()->route('admin.dashboard'),
-        'member' => redirect()->route('customer.dashboard'),
-        default  => redirect()->route('home'),
-    };
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if ($user->isSeller()) {
+        return redirect()->route('seller.dashboard');
+    }
+
+    return redirect()->route('customer.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -36,6 +47,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', function () {
                 return view('admin.dashboard');
             })->name('dashboard');
+
+            // nanti di sini bisa kamu tambah:
+            // /admin/verification, /admin/users, dll
         });
 
     // CUSTOMER (MEMBER)
@@ -46,6 +60,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', function () {
                 return view('customer.dashboard');
             })->name('dashboard');
+
+            // nanti di sini:
+            // /customer/history, /customer/wallet/topup, dll
         });
 
     // STORE REGISTER (MEMBER)
@@ -60,17 +77,57 @@ Route::middleware('auth')->group(function () {
             ->name('store.store');
     });
 
-    // SELLER ROUTE (MEMBER YG PUNYA STORE)
+    // SELLER ROUTE (MEMBER YG PUNYA STORE & VERIFIED)
     Route::middleware('seller')
-        ->prefix('seller')
-        ->name('seller.')
-        ->group(function () {
-            Route::get('/dashboard', function () {
-                return "Seller Dashboard (member + punya store verified)";
-            })->name('dashboard');
-        });
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
+        // DASHBOARD SELLER
+        Route::get('/dashboard', function () {
+            return view('seller.dashboard');
+        })->name('dashboard');
+
+        // ================== KATEGORI (CRUD) ==================
+        Route::get('/categories', [SellerCategoryController::class, 'index'])
+            ->name('categories.index');
+
+        Route::get('/categories/create', [SellerCategoryController::class, 'create'])
+            ->name('categories.create');
+
+        Route::post('/categories', [SellerCategoryController::class, 'store'])
+            ->name('categories.store');
+
+        Route::get('/categories/{category}/edit', [SellerCategoryController::class, 'edit'])
+            ->name('categories.edit');
+
+        Route::put('/categories/{category}', [SellerCategoryController::class, 'update'])
+            ->name('categories.update');
+
+        Route::delete('/categories/{category}', [SellerCategoryController::class, 'destroy'])
+            ->name('categories.destroy');
+
+        // ================== PRODUK (CRUD) ==================
+        Route::get('/products', [SellerProductController::class, 'index'])
+            ->name('products.index');
+
+        Route::get('/products/create', [SellerProductController::class, 'create'])
+            ->name('products.create');
+
+        Route::post('/products', [SellerProductController::class, 'store'])
+            ->name('products.store');
+
+        Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])
+            ->name('products.edit');
+
+        Route::put('/products/{product}', [SellerProductController::class, 'update'])
+            ->name('products.update');
+
+        Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])
+            ->name('products.destroy');
+    });
 });
 
+// route testing
 Route::get('/test-products', function () {
     $products = Product::with(['productImages' => function ($q) {
         $q->where('is_thumbnail', 1);

@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'name',
@@ -25,5 +23,44 @@ class Store extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function balance()
+    {
+        return $this->hasOne(StoreBalance::class);
+    }
+
+    public function balanceHistories()
+    {
+        return $this->hasManyThrough(
+            StoreBalanceHistory::class,
+            StoreBalance::class,
+            'store_id',
+            'store_balance_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasManyThrough(
+            Withdrawal::class,
+            StoreBalance::class,
+            'store_id',
+            'store_balance_id',
+            'id',
+            'id'
+        );
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

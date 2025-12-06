@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id()->primary();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('address_id')->constrained('addresses')->cascadeOnDelete();
             $table->string('name');
             $table->string('logo')->nullable();
             $table->text('about');
             $table->string('phone');
-            $table->string('address_id');
             $table->string('city');
             $table->text('address');
             $table->string('postal_code');

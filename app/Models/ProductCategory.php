@@ -8,22 +8,12 @@ class ProductCategory extends Model
 {
 
     protected $fillable = [
-        'parent_id',
         'image',
         'name',
         'slug',
         'tagline',
         'description',
     ];
-
-    public function parent()
-    {
-        return $this->belongsTo(ProductCategory::class, 'parent_id', 'id');
-    }
-    public function children()
-    {
-        return $this->hasMany(ProductCategory::class, 'parent_id', 'id');
-    } 
 
     public function products()
     {
