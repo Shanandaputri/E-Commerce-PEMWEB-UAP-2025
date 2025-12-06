@@ -3,19 +3,36 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
+use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Models\Product;
 use App\Models\ProductCategory;
-use App\Http\Controllers\Seller\ProductController as SellerProductController;
 
+// HOMEPAGE
 Route::get('/', function () {
     $categories = ProductCategory::all();
-    $products = Product::with(['productImages' => function ($q) {
-        $q->where('is_thumbnail', 1);
-    }])->paginate(12);
 
-    return view('home', compact('products', 'categories'));
+    // Ambil semua produk + thumbnail
+    $allProducts = Product::with(['productImages' => function ($q) {
+        $q->where('is_thumbnail', 1);
+    }])->get();
+
+    // Bagi jadi section-section
+    $newArrivals = $allProducts->take(4);
+    $topSelling  = $allProducts->skip(4)->take(4);
+
+    return view('home', [
+        'categories'  => $categories,
+        'allProducts' => $allProducts,
+        'newArrivals' => $newArrivals,
+        'topSelling'  => $topSelling,
+    ]);
 })->name('home');
+
+// HALAMAN DETAIL PRODUK
+Route::get('/product/{slug}', [ProductController::class, 'show'])
+    ->name('product.show');
 
 // AUTO-REDIRECT DASHBOARD
 Route::get('/dashboard', function () {
@@ -47,9 +64,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', function () {
                 return view('admin.dashboard');
             })->name('dashboard');
-
-            // nanti di sini bisa kamu tambah:
-            // /admin/verification, /admin/users, dll
         });
 
     // CUSTOMER (MEMBER)
@@ -60,9 +74,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/dashboard', function () {
                 return view('customer.dashboard');
             })->name('dashboard');
-
-            // nanti di sini:
-            // /customer/history, /customer/wallet/topup, dll
         });
 
     // STORE REGISTER (MEMBER)
@@ -79,55 +90,55 @@ Route::middleware('auth')->group(function () {
 
     // SELLER ROUTE (MEMBER YG PUNYA STORE & VERIFIED)
     Route::middleware('seller')
-    ->prefix('seller')
-    ->name('seller.')
-    ->group(function () {
-        // DASHBOARD SELLER
-        Route::get('/dashboard', function () {
-            return view('seller.dashboard');
-        })->name('dashboard');
+        ->prefix('seller')
+        ->name('seller.')
+        ->group(function () {
+            // DASHBOARD SELLER
+            Route::get('/dashboard', function () {
+                return view('seller.dashboard');
+            })->name('dashboard');
 
-        // ================== KATEGORI (CRUD) ==================
-        Route::get('/categories', [SellerCategoryController::class, 'index'])
-            ->name('categories.index');
+            // ================== KATEGORI (CRUD) ==================
+            Route::get('/categories', [SellerCategoryController::class, 'index'])
+                ->name('categories.index');
 
-        Route::get('/categories/create', [SellerCategoryController::class, 'create'])
-            ->name('categories.create');
+            Route::get('/categories/create', [SellerCategoryController::class, 'create'])
+                ->name('categories.create');
 
-        Route::post('/categories', [SellerCategoryController::class, 'store'])
-            ->name('categories.store');
+            Route::post('/categories', [SellerCategoryController::class, 'store'])
+                ->name('categories.store');
 
-        Route::get('/categories/{category}/edit', [SellerCategoryController::class, 'edit'])
-            ->name('categories.edit');
+            Route::get('/categories/{category}/edit', [SellerCategoryController::class, 'edit'])
+                ->name('categories.edit');
 
-        Route::put('/categories/{category}', [SellerCategoryController::class, 'update'])
-            ->name('categories.update');
+            Route::put('/categories/{category}', [SellerCategoryController::class, 'update'])
+                ->name('categories.update');
 
-        Route::delete('/categories/{category}', [SellerCategoryController::class, 'destroy'])
-            ->name('categories.destroy');
+            Route::delete('/categories/{category}', [SellerCategoryController::class, 'destroy'])
+                ->name('categories.destroy');
 
-        // ================== PRODUK (CRUD) ==================
-        Route::get('/products', [SellerProductController::class, 'index'])
-            ->name('products.index');
+            // ================== PRODUK (CRUD) ==================
+            Route::get('/products', [SellerProductController::class, 'index'])
+                ->name('products.index');
 
-        Route::get('/products/create', [SellerProductController::class, 'create'])
-            ->name('products.create');
+            Route::get('/products/create', [SellerProductController::class, 'create'])
+                ->name('products.create');
 
-        Route::post('/products', [SellerProductController::class, 'store'])
-            ->name('products.store');
+            Route::post('/products', [SellerProductController::class, 'store'])
+                ->name('products.store');
 
-        Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])
-            ->name('products.edit');
+            Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])
+                ->name('products.edit');
 
-        Route::put('/products/{product}', [SellerProductController::class, 'update'])
-            ->name('products.update');
+            Route::put('/products/{product}', [SellerProductController::class, 'update'])
+                ->name('products.update');
 
-        Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])
-            ->name('products.destroy');
-    });
+            Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])
+                ->name('products.destroy');
+        });
 });
 
-// route testing
+// route testing (opsional)
 Route::get('/test-products', function () {
     $products = Product::with(['productImages' => function ($q) {
         $q->where('is_thumbnail', 1);
