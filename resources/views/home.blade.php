@@ -7,17 +7,27 @@
        
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=integral-cf:400,700|satoshi:400,500,700&display=swap" rel="stylesheet" />
-        
+        <link href="https://fonts.bunny.net/css?family=integral-cf:400,700|anton:400|poppins:400,500,600,700&display=swap" rel="stylesheet" />
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            body { font-family: 'Satoshi', sans-serif; }
-            .font-integral { font-family: 'Integral CF', sans-serif; }
+            body {
+                font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            }
+
+            .font-integral {
+                font-family: 'Integral CF', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            }
+
+            .font-anton {
+                font-family: 'Anton', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+                letter-spacing: 0.03em;
+            }
         </style>
         
     </head>
-    <body class="bg-white">
+    <body class="bg-white font-poppins">
         {{-- HEADER / NAVIGATION --}}
 <header class="border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,56 +145,78 @@
 </header>
 
 {{-- HERO SECTION --}}
-<section class="bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-                <h1 class="font-integral text-4xl md:text-6xl font-bold leading-tight mb-6">
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
+        <div
+            class="relative rounded-[40px] overflow-hidden min-h-[420px] lg:min-h-[480px] flex items-center"
+            style="
+                background-image: url('{{ asset('images/hero/hero1.jpg') }}');
+                background-size: cover;
+                background-position: right center;
+                background-repeat: no-repeat;
+                background-color: #f5f1f1;
+            "
+        >
+            <div class="max-w-xl ml-6 md:ml-12 space-y-6">
+                <h1 class="font-anton text-4xl md:text-6xl font-bold leading-tight">
                     FIND CLOTHES<br>
                     THAT MATCHES<br>
                     YOUR STYLE
                 </h1>
-                <p class="text-gray-600 mb-8 text-sm md:text-base">
-                    Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.
+
+                <p class="text-gray-700 text-sm md:text-base">
+                    Browse through our diverse range of meticulously crafted garments,
+                    designed to bring out your individuality and cater to your sense of style.
                 </p>
-                <a href="#new-arrivals" class="inline-block bg-black text-white px-12 py-3 rounded-full hover:bg-gray-800 transition">
+
+                <a href="#new-arrivals"
+                   class="inline-block bg-black text-white px-12 py-3 rounded-full hover:bg-gray-800 transition">
                     Shop Now
                 </a>
-                
-                {{-- Stats --}}
-                <div class="mt-12 grid grid-cols-3 gap-8">
+
+                <div class="mt-10 grid grid-cols-3 gap-6 md:gap-8">
                     <div>
-                        <p class="text-3xl font-bold">200+</p>
-                        <p class="text-gray-600 text-sm">International Brands</p>
+                        <p class="text-2xl md:text-3xl font-bold">200+</p>
+                        <p class="text-gray-700 text-xs md:text-sm">International Brands</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold">2,000+</p>
-                        <p class="text-gray-600 text-sm">High-Quality Products</p>
+                        <p class="text-2xl md:text-3xl font-bold">2,000+</p>
+                        <p class="text-gray-700 text-xs md:text-sm">High-Quality Products</p>
                     </div>
                     <div>
-                        <p class="text-3xl font-bold">{{ number_format($allProducts->count()) }}+</p>
-                        <p class="text-gray-600 text-sm">Happy Customers</p>
+                        <p class="text-2xl md:text-3xl font-bold">{{ number_format($allProducts->count()) }}+</p>
+                        <p class="text-gray-700 text-xs md:text-sm">Happy Customers</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="relative">
-                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600" 
-                     alt="Hero" 
-                     class="rounded-lg shadow-2xl">
-            </div>
         </div>
     </div>
-    
-    {{-- Brand Logos --}}
-    <div class="bg-black">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-                <span class="text-white text-2xl font-bold font-integral">VERSACE</span>
-                <span class="text-white text-2xl font-bold font-integral">ZARA</span>
-                <span class="text-white text-2xl font-bold font-integral">GUCCI</span>
-                <span class="text-white text-2xl font-bold font-integral">PRADA</span>
-                <span class="text-white text-2xl font-bold">Calvin Klein</span>
+
+    {{-- BRAND LOGOS --}}
+    <div class="bg-black py-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16">
+                
+                <img src="{{ asset('images/brands/versace.png') }}"
+                     alt="Versace"
+                     class="h-6 md:h-8 lg:h-10 opacity-90 hover:opacity-100 transition object-contain">
+
+                <img src="{{ asset('images/brands/zara.png') }}"
+                     alt="Zara"
+                     class="h-6 md:h-8 lg:h-10 opacity-90 hover:opacity-100 transition object-contain">
+
+                <img src="{{ asset('images/brands/gucci.png') }}"
+                     alt="Gucci"
+                     class="h-6 md:h-8 lg:h-10 opacity-90 hover:opacity-100 transition object-contain">
+
+                <img src="{{ asset('images/brands/prada.png') }}"
+                     alt="Prada"
+                     class="h-6 md:h-8 lg:h-10 opacity-90 hover:opacity-100 transition object-contain">
+
+                <img src="{{ asset('images/brands/calvin.png') }}"
+                     alt="Calvin Klein"
+                     class="h-6 md:h-8 lg:h-10 opacity-90 hover:opacity-100 transition object-contain">
+                
             </div>
         </div>
     </div>
@@ -193,19 +225,21 @@
 {{-- NEW ARRIVALS SECTION --}}
 <section class="py-16" id="new-arrivals">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">NEW ARRIVALS</h2>
+        <h2 class="text-3xl md:text-4xl font-bold font-anton text-center mb-12">
+            NEW ARRIVALS
+        </h2>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($newArrivals as $product)
             <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-3">
+                <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
                     @php
                         $thumb = $product->productImages->first();
                     @endphp
                     @if($thumb)
-                        <img src="{{ asset('storage/'.$thumb->image) }}" 
+                        <img src="{{ asset($thumb->image) }}" 
                             alt="{{ $product->name }}"
-                            class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-gray-400">
                             No Image
@@ -241,19 +275,21 @@
 {{-- TOP SELLING SECTION --}}
 <section class="py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">TOP SELLING</h2>
+        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">
+            TOP SELLING
+        </h2>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($topSelling as $product)
                 <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
-                    <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-3">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
                         @php
                             $thumb = $product->productImages->first();
                         @endphp
                         @if($thumb)
-                            <img src="{{ asset('storage/'.$thumb->image) }}" 
+                            <img src="{{ asset($thumb->image) }}" 
                                  alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-400">
                                 No Image
@@ -288,7 +324,9 @@
 <section class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-integral">OUR HAPPY CUSTOMERS</h2>
+            <h2 class="text-3xl md:text-4xl font-bold font-integral">
+                OUR HAPPY CUSTOMERS
+            </h2>
             <div class="flex space-x-2">
                 <button class="p-2 border rounded-full hover:bg-white">←</button>
                 <button class="p-2 border rounded-full hover:bg-white">→</button>
@@ -391,20 +429,19 @@
                 </ul>
             </div>
         </div>
-        
-        <hr class="mb-8">
-        
-        <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-            <p>Shop.co © 2000-2023, All Rights Reserved</p>
-            <div class="flex space-x-4 mt-4 md:mt-0">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-6">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-6">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="h-6">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay" class="h-6">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay" class="h-6">
-            </div>
+    <hr class="mb-8">
+    
+    <div class="flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
+        <p>Shop.co © 2000-2023, All Rights Reserved</p>
+        <div class="flex space-x-4 mt-4 md:mt-0">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="h-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay" class="h-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay" class="h-6">
         </div>
     </div>
+</div>
 </footer>
 </body>
 </html>

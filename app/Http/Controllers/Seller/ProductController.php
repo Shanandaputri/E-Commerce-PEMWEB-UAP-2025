@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
-        // Simpan gambar (kalau ada)
+        // Simpan gambar
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
                 $path = $file->store('product_images', 'public');

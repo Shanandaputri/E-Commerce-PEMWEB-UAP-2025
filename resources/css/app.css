@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ------------ FONT SETUP ------------ */
+.font-anton {
+    font-family: 'Anton', sans-serif;
+}
+
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
+}
+
+.font-integral {
+    font-family: 'Integral CF', sans-serif;
+}
