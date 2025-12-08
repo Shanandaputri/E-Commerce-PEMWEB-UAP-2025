@@ -9,18 +9,18 @@ class ProductImageSeeder extends Seeder
 {
     public function run(): void
     {
-        $jumlahKategori = 5;
+        $jumlahKategori   = 5;
         $produkPerKategori = 3;
-        $fotoPerProduk = 3;
+        $fotoPerProduk     = 3;
 
-        $totalProduk = $jumlahKategori * $produkPerKategori;
+        $totalProduk = $jumlahKategori * $produkPerKategori; // 15
 
         for ($product = 1; $product <= $totalProduk; $product++) {
 
-            // Hitung kategori saat ini
+            // kategori sekarang (1..5)
             $kategori = ceil($product / $produkPerKategori);
 
-            // Produk ke berapa dalam kategori
+            // urutan produk dalam kategori (1..3)
             $produkKe = $product % $produkPerKategori;
             if ($produkKe == 0) $produkKe = $produkPerKategori;
 
@@ -28,7 +28,7 @@ class ProductImageSeeder extends Seeder
 
                 ProductImage::create([
                     'product_id'   => $product,
-                    'image'        => "images/products/product-{$kategori}-{$produkKe}-{$foto}.jpg",
+                    'image'        => "images/products/product-{$kategori}-{$produkKe}-{$foto}.png", 
                     'is_thumbnail' => $foto === 1,  // Foto 1 jadi thumbnail
                 ]);
             }

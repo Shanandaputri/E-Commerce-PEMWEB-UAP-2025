@@ -73,9 +73,26 @@ Route::middleware('auth')->group(function () {
         ->name('customer.')
         ->group(function () {
             Route::get('/dashboard', function () {
-                return view('customer.dashboard');
+
+                // === copy logic dari route '/' ===
+                $categories = ProductCategory::all();
+
+                $allProducts = Product::with(['productImages' => function ($q) {
+                    $q->where('is_thumbnail', 1);
+                }])->get();
+
+                $newArrivals = $allProducts->take(4);
+                $topSelling  = $allProducts->skip(4)->take(4);
+
+                return view('customer.dashboard', [
+                    'categories'  => $categories,
+                    'allProducts' => $allProducts,
+                    'newArrivals' => $newArrivals,
+                    'topSelling'  => $topSelling,
+                ]);
             })->name('dashboard');
         });
+
 
     // STORE REGISTER (MEMBER)
     Route::middleware('role:member')->group(function () {
