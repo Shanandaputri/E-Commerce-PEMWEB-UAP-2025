@@ -13,11 +13,11 @@ class WalletTransaction extends Model
         'amount',
         'status',
         'va_number',
-        'description'
+        'description',
     ];
 
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class);
+        return $this->belongsTo(UserBalance::class, 'wallet_id');
     }
 }

@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Store;
-use App\Models\UserBalance;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\UserBalance;
 
 class User extends Authenticatable
 {
@@ -59,11 +60,6 @@ class User extends Authenticatable
         return $this->hasOne(Store::class);
     }
 
-    public function balance()
-    {
-        return $this->hasOne(UserBalance::class);
-    }
-
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'buyer_id');
@@ -71,6 +67,6 @@ class User extends Authenticatable
 
     public function wallet(): HasOne
     {
-        return $this->hasOne(Wallet::class);
+        return $this->hasOne(UserBalance::class, 'user_id');
     }
 }

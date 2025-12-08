@@ -10,12 +10,17 @@ return new class extends Migration
     {
         Schema::create('wallet_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('wallet_id')->constrained()->onDelete('cascade');
-            $table->string('transaction_type'); // topup, payment, refund
-            $table->decimal('amount', 15, 2);
-            $table->string('status')->default('pending'); // pending, success, failed
+            $table->foreignId('wallet_id')
+                  ->constrained('user_balances')
+                  ->onDelete('cascade');
+
+            $table->enum('transaction_type', ['topup', 'payment', 'refund'])
+                  ->default('topup');
+
+            $table->bigInteger('amount');
+            $table->string('status')->default('pending');
             $table->string('va_number')->nullable();
-            $table->text('description')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

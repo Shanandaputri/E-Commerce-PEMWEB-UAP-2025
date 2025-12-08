@@ -10,6 +10,8 @@ use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WalletController;
+
 
 
 // HOMEPAGE
@@ -162,19 +164,13 @@ Route::middleware('auth')->group(function () {
         });
 
     // WALLET ROUTES
-    Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet.index');
-    Route::get('/wallet/topup', [App\Http\Controllers\WalletController::class, 'topup'])->name('wallet.topup');
-    Route::post('/wallet/topup', [App\Http\Controllers\WalletController::class, 'storeTopup'])->name('wallet.topup.store');
-    Route::post('/wallet/confirm-payment', [App\Http\Controllers\WalletController::class, 'confirmPayment'])->name('wallet.confirm');
-});
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
+    Route::post('/wallet/topup', [WalletController::class, 'storeTopup'])->name('wallet.topup.store');
 
-// route testing (opsional)
-Route::get('/test-products', function () {
-    $products = Product::with(['productImages' => function ($q) {
-        $q->where('is_thumbnail', 1);
-    }])->get();
-
-    return view('test-products', compact('products'));
+    // Payment page
+    Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
+    Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
 });
 
 require __DIR__.'/auth.php';
