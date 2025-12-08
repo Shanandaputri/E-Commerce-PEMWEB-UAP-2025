@@ -1,29 +1,92 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Seller Dashboard
-        </h2>
-    </x-slot>
+{{-- resources/views/seller/dashboard.blade.php --}}
+@extends('seller.layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <p>Hai, {{ auth()->user()->name }}!</p>
-                    <p>Toko: {{ auth()->user()->store->name ?? '-' }}</p>
+@section('title', 'Dashboard Seller')
+@section('page-title', 'Dashboard Seller')
 
-                    <div class="mt-4">
-                        <ul class="list-disc pl-5">
-                            <li><a href="#">Kelola Profil Toko</a></li>
-                            <li><a href="#">Kelola Kategori</a></li>
-                            <li><a href="#">Kelola Produk</a></li>
-                            <li><a href="#">Pesanan Masuk</a></li>
-                            <li><a href="#">Saldo Toko & Riwayat</a></li>
-                            <li><a href="#">Penarikan Dana</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+@section('content')
+
+    {{-- row cards statistik --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm">
+            <p class="text-xs font-medium text-gray-500 mb-1">Total Produk</p>
+            <p class="text-2xl font-semibold text-gray-900">24</p>
+            <p class="text-xs text-green-600 mt-1">+3 produk minggu ini</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm">
+            <p class="text-xs font-medium text-gray-500 mb-1">Pesanan Hari Ini</p>
+            <p class="text-2xl font-semibold text-gray-900">5</p>
+            <p class="text-xs text-gray-500 mt-1">Menunggu dikirim: 2</p>
+        </div>
+
+        <div class="bg-white border border-gray-100 rounded-2xl px-5 py-4 shadow-sm">
+            <p class="text-xs font-medium text-gray-500 mb-1">Pendapatan Bulan Ini</p>
+            <p class="text-2xl font-semibold text-gray-900">Rp 12.500.000</p>
+            <p class="text-xs text-green-600 mt-1">+18% dari bulan lalu</p>
         </div>
     </div>
-</x-app-layout>
+
+    {{-- card besar: pesanan terbaru --}}
+    <div class="bg-white border border-gray-100 rounded-2xl shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-gray-800">
+                Pesanan Terbaru
+            </h2>
+            <a href="#" class="text-xs text-blue-600 hover:underline">
+                Lihat semua
+            </a>
+        </div>
+
+        <div class="px-6 py-4">
+            <table class="w-full text-sm">
+                <thead>
+                <tr class="text-xs uppercase text-gray-400">
+                    <th class="py-2 text-left">Order</th>
+                    <th class="py-2 text-left">Produk</th>
+                    <th class="py-2 text-left">Tanggal</th>
+                    <th class="py-2 text-left">Status</th>
+                    <th class="py-2 text-right">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{-- dummy data --}}
+                <tr class="border-t border-gray-100">
+                    <td class="py-3">#ORD-0012</td>
+                    <td class="py-3">JEANS ZW WIDE LEG TIRO MD</td>
+                    <td class="py-3">08 Des 2025</td>
+                    <td class="py-3">
+                        <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-green-50 text-green-600">
+                            Selesai
+                        </span>
+                    </td>
+                    <td class="py-3 text-right">Rp 1.699.000</td>
+                </tr>
+                <tr class="border-t border-gray-100">
+                    <td class="py-3">#ORD-0011</td>
+                    <td class="py-3">JAKET BOMBER WOL ZW</td>
+                    <td class="py-3">08 Des 2025</td>
+                    <td class="py-3">
+                        <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-yellow-50 text-yellow-600">
+                            Diproses
+                        </span>
+                    </td>
+                    <td class="py-3 text-right">Rp 2.299.000</td>
+                </tr>
+                <tr class="border-t border-gray-100">
+                    <td class="py-3">#ORD-0010</td>
+                    <td class="py-3">T-Shirt Graphic Oversize</td>
+                    <td class="py-3">07 Des 2025</td>
+                    <td class="py-3">
+                        <span class="inline-flex items-center px-2 py-1 text-xs rounded-full bg-red-50 text-red-600">
+                            Dibatalkan
+                        </span>
+                    </td>
+                    <td class="py-3 text-right">Rp 399.000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@endsection

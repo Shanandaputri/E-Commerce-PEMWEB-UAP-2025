@@ -12,6 +12,8 @@ use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
+
 
 
 
@@ -100,6 +102,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/transactions', [TransactionController::class, 'index'])
     ->name('transactions.index');
+
+    Route::get('/kategori/{category:slug}', [CategoryController::class, 'show'])
+    ->name('category.show');
 
 
 
