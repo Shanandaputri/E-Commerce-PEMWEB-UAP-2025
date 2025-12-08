@@ -12,8 +12,15 @@ use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
+<<<<<<< HEAD
+use App\Http\Controllers\CategoryController;
+
+
+
+=======
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HistoryController;
+>>>>>>> e3227eedb02e6ea16095a4fbdd6a6c29ac1524ca
 
 // HOMEPAGE
 Route::get('/', function () {
@@ -94,9 +101,19 @@ Route::middleware('auth')->group(function () {
             })->name('dashboard');
         });
 
+<<<<<<< HEAD
+        Route::get('/transactions', [TransactionController::class, 'index'])
+    ->name('transactions.index');
+
+    Route::get('/kategori/{category:slug}', [CategoryController::class, 'show'])
+    ->name('category.show');
+
+
+=======
     // TRANSAKSI LIST
     Route::get('/transactions', [TransactionController::class, 'index'])
         ->name('transactions.index');
+>>>>>>> e3227eedb02e6ea16095a4fbdd6a6c29ac1524ca
 
     // STORE REGISTER (MEMBER)
     Route::middleware('role:member')->group(function () {
