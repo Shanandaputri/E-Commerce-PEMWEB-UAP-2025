@@ -12,21 +12,24 @@ use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
+<<<<<<< HEAD
 use App\Http\Controllers\CategoryController;
 
 
 
+=======
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HistoryController;
+>>>>>>> e3227eedb02e6ea16095a4fbdd6a6c29ac1524ca
 
 // HOMEPAGE
 Route::get('/', function () {
     $categories = ProductCategory::all();
 
-    // Ambil semua produk + thumbnail
     $allProducts = Product::with(['productImages' => function ($q) {
         $q->where('is_thumbnail', 1);
     }])->get();
 
-    // Bagi jadi section-section
     $newArrivals = $allProducts->take(4);
     $topSelling  = $allProducts->skip(4)->take(4);
 
@@ -38,7 +41,7 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-// HALAMAN DETAIL PRODUK
+// DETAIL PRODUK
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->name('product.show');
 
@@ -64,7 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ADMIN ONLY
+    // ADMIN
     Route::middleware('role:admin')
         ->prefix('admin')
         ->name('admin.')
@@ -80,8 +83,6 @@ Route::middleware('auth')->group(function () {
         ->name('customer.')
         ->group(function () {
             Route::get('/dashboard', function () {
-
-                // === copy logic dari route '/' ===
                 $categories = ProductCategory::all();
 
                 $allProducts = Product::with(['productImages' => function ($q) {
@@ -100,6 +101,7 @@ Route::middleware('auth')->group(function () {
             })->name('dashboard');
         });
 
+<<<<<<< HEAD
         Route::get('/transactions', [TransactionController::class, 'index'])
     ->name('transactions.index');
 
@@ -107,81 +109,66 @@ Route::middleware('auth')->group(function () {
     ->name('category.show');
 
 
+=======
+    // TRANSAKSI LIST
+    Route::get('/transactions', [TransactionController::class, 'index'])
+        ->name('transactions.index');
+>>>>>>> e3227eedb02e6ea16095a4fbdd6a6c29ac1524ca
 
     // STORE REGISTER (MEMBER)
     Route::middleware('role:member')->group(function () {
-
-        // form daftar toko
-        Route::get('/store/register', [StoreController::class, 'create'])
-            ->name('store.register');
-
-        // submit form daftar toko
-        Route::post('/store/register', [StoreController::class, 'store'])
-            ->name('store.store');
+        Route::get('/store/register', [StoreController::class, 'create'])->name('store.register');
+        Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
     });
 
-    // SELLER ROUTE (MEMBER YG PUNYA STORE & VERIFIED)
+    // SELLER (YANG PUNYA STORE)
     Route::middleware('seller')
         ->prefix('seller')
         ->name('seller.')
         ->group(function () {
-            // DASHBOARD SELLER
             Route::get('/dashboard', function () {
                 return view('seller.dashboard');
             })->name('dashboard');
 
-            // ================== KATEGORI (CRUD) ==================
-            Route::get('/categories', [SellerCategoryController::class, 'index'])
-                ->name('categories.index');
+            // KATEGORI
+            Route::get('/categories', [SellerCategoryController::class, 'index'])->name('categories.index');
+            Route::get('/categories/create', [SellerCategoryController::class, 'create'])->name('categories.create');
+            Route::post('/categories', [SellerCategoryController::class, 'store'])->name('categories.store');
+            Route::get('/categories/{category}/edit', [SellerCategoryController::class, 'edit'])->name('categories.edit');
+            Route::put('/categories/{category}', [SellerCategoryController::class, 'update'])->name('categories.update');
+            Route::delete('/categories/{category}', [SellerCategoryController::class, 'destroy'])->name('categories.destroy');
 
-            Route::get('/categories/create', [SellerCategoryController::class, 'create'])
-                ->name('categories.create');
-
-            Route::post('/categories', [SellerCategoryController::class, 'store'])
-                ->name('categories.store');
-
-            Route::get('/categories/{category}/edit', [SellerCategoryController::class, 'edit'])
-                ->name('categories.edit');
-
-            Route::put('/categories/{category}', [SellerCategoryController::class, 'update'])
-                ->name('categories.update');
-
-            Route::delete('/categories/{category}', [SellerCategoryController::class, 'destroy'])
-                ->name('categories.destroy');
-
-            // ================== PRODUK (CRUD) ==================
-            Route::get('/products', [SellerProductController::class, 'index'])
-                ->name('products.index');
-
-            Route::get('/products/create', [SellerProductController::class, 'create'])
-                ->name('products.create');
-
-            Route::post('/products', [SellerProductController::class, 'store'])
-                ->name('products.store');
-
-            Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])
-                ->name('products.edit');
-
-            Route::put('/products/{product}', [SellerProductController::class, 'update'])
-                ->name('products.update');
-
-            Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])
-                ->name('products.destroy');
+            // PRODUK
+            Route::get('/products', [SellerProductController::class, 'index'])->name('products.index');
+            Route::get('/products/create', [SellerProductController::class, 'create'])->name('products.create');
+            Route::post('/products', [SellerProductController::class, 'store'])->name('products.store');
+            Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])->name('products.edit');
+            Route::put('/products/{product}', [SellerProductController::class, 'update'])->name('products.update');
+            Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])->name('products.destroy');
         });
 
-    // WALLET ROUTES
+    // WALLET
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
     Route::post('/wallet/topup', [WalletController::class, 'storeTopup'])->name('wallet.topup.store');
 
-    // Payment page
+    // PAYMENT PAGE
     Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
     Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
-});
 
-Route::middleware('auth')->group(function () {
-    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index'); // nanti buat halaman keranjang
+    // CART
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add'); // add to cart dari homepage
+    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    // CHECKOUT
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+    // HISTORY
+    Route::get('/history', [HistoryController::class, 'index'])->name('customer.history');
 });
 
 require __DIR__.'/auth.php';
