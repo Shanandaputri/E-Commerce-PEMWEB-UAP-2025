@@ -9,6 +9,8 @@ use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Http\Controllers\TransactionController;
+
 
 // HOMEPAGE
 Route::get('/', function () {
@@ -92,6 +94,10 @@ Route::middleware('auth')->group(function () {
                 ]);
             })->name('dashboard');
         });
+
+        Route::get('/transactions', [TransactionController::class, 'index'])
+    ->name('transactions.index');
+
 
 
     // STORE REGISTER (MEMBER)
