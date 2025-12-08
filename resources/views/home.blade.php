@@ -63,9 +63,7 @@
                         </div>
                     </div>
                     
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="text-gray-900 hover:text-gray-600">Dashboard</a>
-                    @endauth
+
                 </nav>
             </div>
             
@@ -119,10 +117,7 @@
                                         </span>
                                     </div>
                                 </a>
-                                
-                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Dashboard
-                                </a>
+
                                 
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile

@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\CartController;
 
 
 
@@ -171,6 +172,11 @@ Route::middleware('auth')->group(function () {
     // Payment page
     Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
     Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index'); // nanti buat halaman keranjang
 });
 
 require __DIR__.'/auth.php';
