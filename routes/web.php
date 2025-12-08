@@ -11,8 +11,9 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
-
-
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HistoryController;
 
 // HOMEPAGE
 Route::get('/', function () {
@@ -171,6 +172,20 @@ Route::middleware('auth')->group(function () {
     // Payment page
     Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
     Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
+
+    // Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    // Checkout
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+    // History
+    Route::get('/history', [HistoryController::class, 'index'])->name('customer.history');
+
 });
 
 require __DIR__.'/auth.php';
