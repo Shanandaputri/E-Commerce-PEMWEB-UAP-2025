@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 
 class ProductController extends Controller
 {
-    public function show(string $slug)
+    public function show($slug)
     {
         $product = Product::with([
                 'productImages',
+                'productReviews',
                 'store',
                 'productCategory',
-                'productReviews',
             ])
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('product.show', compact('product'));
+        $categories = ProductCategory::all();
+
+        return view('product.show', compact('product', 'categories'));
     }
 }
