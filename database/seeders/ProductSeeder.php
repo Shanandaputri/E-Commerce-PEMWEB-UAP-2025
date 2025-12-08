@@ -13,7 +13,7 @@ class ProductSeeder extends Seeder
         $products = [
             //product 1
             [
-                'name'        => 'Gaun Satin Aurora',
+                'name'        => 'JAKET RAJUTAN BOUCLÉ',
                 'category_id' => 1,
                 'price'       => 650000,
                 'stock'       => 8,

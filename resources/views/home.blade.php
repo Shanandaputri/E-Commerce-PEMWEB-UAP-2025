@@ -111,10 +111,12 @@
                                 </div>
                                 
                                 {{-- E-Wallet/Saldo --}}
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('wallet.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <div class="flex items-center justify-between">
                                         <span>E-Wallet</span>
-                                        <span class="font-semibold text-green-600">Rp 0</span>
+                                        <span class="font-semibold text-green-600">
+                                            Rp {{ number_format(auth()->user()->wallet->balance ?? 0, 0, ',', '.') }}
+                                        </span>
                                     </div>
                                 </a>
                                 
@@ -229,7 +231,9 @@
             NEW ARRIVALS
         </h2>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {{-- Grid Products --}}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="new-arrivals-grid">
+            {{-- Tampilkan 4 produk pertama --}}
             @foreach($newArrivals as $product)
             <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
                 <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -259,11 +263,44 @@
                 </div>
                 <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
             </a>
-        @endforeach
+            @endforeach
+
+            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
+            @foreach($allProducts->skip(4) as $product)
+            <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block hidden new-arrivals-hidden">
+                <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                    @php
+                        $thumb = $product->productImages->first();
+                    @endphp
+                    @if($thumb)
+                        <img src="{{ asset($thumb->image) }}" 
+                            alt="{{ $product->name }}"
+                            class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            No Image
+                        </div>
+                    @endif
+                </div>
+                <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
+                <div class="flex items-center mb-1">
+                    <div class="flex text-yellow-400 text-sm">
+                        @for($i = 0; $i < 5; $i++)
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                        @endfor
+                    </div>
+                    <span class="text-sm text-gray-600 ml-2">4.5/5</span>
+                </div>
+                <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+            </a>
+            @endforeach
         </div>
         
+        {{-- Button View All --}}
         <div class="text-center mt-8">
-            <button class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
+            <button onclick="toggleProducts('new-arrivals')" id="new-arrivals-btn" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
                 View All
             </button>
         </div>
@@ -279,7 +316,264 @@
             TOP SELLING
         </h2>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {{-- Grid Products --}}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
+            {{-- Tampilkan 4 produk pertama --}}
+            @foreach($topSelling as $product)
+                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        @php
+                            $thumb = $product->productImages->first();
+                        @endphp
+                        @if($thumb)
+                            <img src="{{ asset($thumb->image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-sm">
+                            @for($i = 0; $i < 5; $i++)
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            @endfor
+                        </div>
+                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
+                    </div>
+                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                </a>
+            @endforeach
+
+            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
+            @foreach($allProducts->skip(8)->take(20) as $product)
+                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block hidden top-selling-hidden">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        @php
+                            $thumb = $product->productImages->first();
+                        @endphp
+                        @if($thumb)
+                            <img src="{{ asset($thumb->image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-sm">
+                            @for($i = 0; $i < 5; $i++)
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            @endfor
+                        </div>
+                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
+                    </div>
+                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                </a>
+            @endforeach
+        </div>
+        
+        {{-- Button View All --}}
+        <div class="text-center mt-8">
+            <button onclick="toggleProducts('top-selling')" id="top-selling-btn" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
+                View All
+            </button>
+        </div>
+    </div>
+</section>
+
+{{-- CUSTOMER REVIEWS SECTION --}}
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold font-integral">
+                OUR HAPPY CUSTOMERS
+            </h2>
+            <div class="flex space-x-2">
+                <button class="p-2 border rounded-full hover:bg-white">←</button>
+                <button class="p-2 border rounded-full hover:bg-white">→</button>
+            </div>
+        </div>
+        
+        @php
+            $customers = [
+                ['name' => 'Sarah M.', 'review' => 'I\'m blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I\'ve bought has exceeded my expectations.'],
+                ['name' => 'Alex K.', 'review' => 'Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.'],
+                ['name' => 'James L.', 'review' => 'As someone who\'s always on the lookout for unique fashion pieces, I\'m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.'],
+            ];
+        @endphp
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach($customers as $customer)
+                <div class="bg-white p-6 rounded-lg border">
+                    <div class="flex text-yellow-400 mb-3">
+                        @for($j = 0; $j < 5; $j++)
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                        @endfor
+                    </div>
+                    <div class="flex items-center mb-3">
+                        <h4 class="font-bold">{{ $customer['name'] }}</h4>
+                        <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600 text-sm">
+                        "{{ $customer['review'] }}"
+                    </p>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- NEWSLETTER & FOOTER (tetap sama) --}}
+
+{{-- JAVASCRIPT - LETAKKAN SEBELUM </body> --}}
+<script>
+    function toggleProducts(section) {
+        const hiddenProducts = document.querySelectorAll(`.${section}-hidden`);
+        const button = document.getElementById(`${section}-btn`);
+        
+        hiddenProducts.forEach(product => {
+            if (product.classList.contains('hidden')) {
+                // Show products dengan animasi
+                product.classList.remove('hidden');
+                product.style.animation = 'fadeIn 0.5s ease-in';
+            } else {
+                // Hide products
+                product.classList.add('hidden');
+            }
+        });
+        
+        // Toggle button text
+        if (button.textContent.trim() === 'View All') {
+            button.textContent = 'Show Less';
+        } else {
+            button.textContent = 'View All';
+        }
+    }
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<hr class="max-w-7xl mx-auto">
+
+{{-- TOP SELLING SECTION --}}
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">
+            TOP SELLING
+        </h2>
+        
+        {{-- Grid Products --}}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
+            {{-- Tampilkan 4 produk pertama --}}
+            @foreach($topSelling as $product)
+                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block product-card">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        @php
+                            $thumb = $product->productImages->first();
+                        @endphp
+                        @if($thumb)
+                            <img src="{{ asset($thumb->image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-sm">
+                            @for($i = 0; $i < 5; $i++)
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            @endfor
+                        </div>
+                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
+                    </div>
+                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                </a>
+            @endforeach
+
+            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
+            @foreach($allProducts->skip(8)->take(20) as $product)
+                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block product-card hidden top-selling-hidden">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        @php
+                            $thumb = $product->productImages->first();
+                        @endphp
+                        @if($thumb)
+                            <img src="{{ asset($thumb->image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-sm">
+                            @for($i = 0; $i < 5; $i++)
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            @endfor
+                        </div>
+                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
+                    </div>
+                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                </a>
+            @endforeach
+        </div>
+        
+        {{-- Button View All --}}
+        <div class="text-center mt-8">
+            <button onclick="toggleProducts('top-selling')" id="top-selling-btn" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
+                View All
+            </button>
+        </div>
+    </div>
+</section>
+
+<hr class="max-w-7xl mx-auto">
+
+{{-- TOP SELLING SECTION --}}
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">
+            TOP SELLING
+        </h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
             @foreach($topSelling as $product)
                 <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
                     <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -313,12 +607,106 @@
         </div>
         
         <div class="text-center mt-8">
-            <button class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
+            <button onclick="showAllProducts('top-selling')" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
                 View All
             </button>
         </div>
     </div>
 </section>
+
+{{-- MODAL POPUP UNTUK VIEW ALL --}}
+<div id="products-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+        <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+            <h3 id="modal-title" class="text-2xl font-bold font-anton">ALL PRODUCTS</h3>
+            <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+            <div id="modal-products-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {{-- Products akan dimuat via JavaScript --}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- SCRIPT JAVASCRIPT --}}
+<script>
+    // Data semua produk dari Laravel
+    const allProducts = @json($allProducts);
+    
+    function showAllProducts(type) {
+        const modal = document.getElementById('products-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const grid = document.getElementById('modal-products-grid');
+        
+        // Update title
+        if (type === 'new-arrivals') {
+            modalTitle.textContent = 'NEW ARRIVALS - ALL PRODUCTS';
+        } else if (type === 'top-selling') {
+            modalTitle.textContent = 'TOP SELLING - ALL PRODUCTS';
+        }
+        
+        // Clear grid
+        grid.innerHTML = '';
+        
+        // Render all products
+        allProducts.forEach(product => {
+            const thumbnail = product.product_images && product.product_images.length > 0 
+                ? product.product_images[0].image 
+                : null;
+            
+            const productCard = `
+                <a href="/product/${product.slug}" class="group cursor-pointer block">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        ${thumbnail 
+                            ? `<img src="/${thumbnail}" alt="${product.name}" class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">`
+                            : `<div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>`
+                        }
+                    </div>
+                    <h3 class="font-semibold mb-1 text-sm">${product.name}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-xs">
+                            ${'<svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>'.repeat(5)}
+                        </div>
+                        <span class="text-xs text-gray-600 ml-1">4.5/5</span>
+                    </div>
+                    <p class="font-bold">Rp ${new Intl.NumberFormat('id-ID').format(product.price)}</p>
+                </a>
+            `;
+            
+            grid.innerHTML += productCard;
+        });
+        
+        // Show modal
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById('products-modal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Close modal ketika klik di luar
+    document.getElementById('products-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    // Close modal dengan tombol ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
 
 {{-- CUSTOMER REVIEWS SECTION --}}
 <section class="py-16 bg-gray-50">
@@ -333,8 +721,16 @@
             </div>
         </div>
         
+        @php
+            $customers = [
+                ['name' => 'Sarah M.', 'review' => 'I\'m blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I\'ve bought has exceeded my expectations.'],
+                ['name' => 'Alex K.', 'review' => 'Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.'],
+                ['name' => 'James L.', 'review' => 'As someone who\'s always on the lookout for unique fashion pieces, I\'m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.'],
+            ];
+        @endphp
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @for($i = 0; $i < 3; $i++)
+            @foreach($customers as $customer)
                 <div class="bg-white p-6 rounded-lg border">
                     <div class="flex text-yellow-400 mb-3">
                         @for($j = 0; $j < 5; $j++)
@@ -344,16 +740,16 @@
                         @endfor
                     </div>
                     <div class="flex items-center mb-3">
-                        <h4 class="font-bold">Customer {{ $i + 1 }}</h4>
+                        <h4 class="font-bold">{{ $customer['name'] }}</h4>
                         <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
                     <p class="text-gray-600 text-sm">
-                        "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations."
+                        "{{ $customer['review'] }}"
                     </p>
                 </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 </section>

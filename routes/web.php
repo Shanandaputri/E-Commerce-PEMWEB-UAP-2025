@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
@@ -136,6 +137,12 @@ Route::middleware('auth')->group(function () {
             Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])
                 ->name('products.destroy');
         });
+
+    // WALLET ROUTES
+    Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/wallet/topup', [App\Http\Controllers\WalletController::class, 'topup'])->name('wallet.topup');
+    Route::post('/wallet/topup', [App\Http\Controllers\WalletController::class, 'storeTopup'])->name('wallet.topup.store');
+    Route::post('/wallet/confirm-payment', [App\Http\Controllers\WalletController::class, 'confirmPayment'])->name('wallet.confirm');
 });
 
 // route testing (opsional)
