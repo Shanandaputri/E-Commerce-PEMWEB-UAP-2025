@@ -12,15 +12,8 @@ use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
-<<<<<<< HEAD
-use App\Http\Controllers\CategoryController;
-
-
-
-=======
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HistoryController;
->>>>>>> e3227eedb02e6ea16095a4fbdd6a6c29ac1524ca
 
 // HOMEPAGE
 Route::get('/', function () {
