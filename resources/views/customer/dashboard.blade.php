@@ -438,9 +438,7 @@
     </div>
 </section>
 
-{{-- NEWSLETTER & FOOTER (tetap sama) --}}
-
-{{-- JAVASCRIPT - LETAKKAN SEBELUM </body> --}}
+{{-- JAVASCRIPT </body> --}}
 <script>
     function toggleProducts(section) {
         const hiddenProducts = document.querySelectorAll(`.${section}-hidden`);
@@ -480,139 +478,6 @@
 </style>
 
 <hr class="max-w-7xl mx-auto">
-
-{{-- TOP SELLING SECTION --}}
-<section class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">
-            TOP SELLING
-        </h2>
-        
-        {{-- Grid Products --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
-            {{-- Tampilkan 4 produk pertama --}}
-            @foreach($topSelling as $product)
-                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block product-card">
-                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
-                        @php
-                            $thumb = $product->productImages->first();
-                        @endphp
-                        @if($thumb)
-                            <img src="{{ asset($thumb->image) }}" 
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                No Image
-                            </div>
-                        @endif
-                    </div>
-                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
-                    <div class="flex items-center mb-1">
-                        <div class="flex text-yellow-400 text-sm">
-                            @for($i = 0; $i < 5; $i++)
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                </svg>
-                            @endfor
-                        </div>
-                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
-                    </div>
-                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                </a>
-            @endforeach
-
-            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
-            @foreach($allProducts->skip(8)->take(20) as $product)
-                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block product-card hidden top-selling-hidden">
-                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
-                        @php
-                            $thumb = $product->productImages->first();
-                        @endphp
-                        @if($thumb)
-                            <img src="{{ asset($thumb->image) }}" 
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                No Image
-                            </div>
-                        @endif
-                    </div>
-                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
-                    <div class="flex items-center mb-1">
-                        <div class="flex text-yellow-400 text-sm">
-                            @for($i = 0; $i < 5; $i++)
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                </svg>
-                            @endfor
-                        </div>
-                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
-                    </div>
-                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                </a>
-            @endforeach
-        </div>
-        
-        {{-- Button View All --}}
-        <div class="text-center mt-8">
-            <button onclick="toggleProducts('top-selling')" id="top-selling-btn" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
-                View All
-            </button>
-        </div>
-    </div>
-</section>
-
-<hr class="max-w-7xl mx-auto">
-
-{{-- TOP SELLING SECTION --}}
-<section class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold font-integral text-center mb-12">
-            TOP SELLING
-        </h2>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
-            @foreach($topSelling as $product)
-                <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
-                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
-                        @php
-                            $thumb = $product->productImages->first();
-                        @endphp
-                        @if($thumb)
-                            <img src="{{ asset($thumb->image) }}" 
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                No Image
-                            </div>
-                        @endif
-                    </div>
-                    <h3 class="font-semibold mb-1">{{ $product->name }}</h3>
-                    <div class="flex items-center mb-1">
-                        <div class="flex text-yellow-400 text-sm">
-                            @for($i = 0; $i < 5; $i++)
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                </svg>
-                            @endfor
-                        </div>
-                        <span class="text-sm text-gray-600 ml-2">4.5/5</span>
-                    </div>
-                    <p class="font-bold text-lg">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                </a>
-            @endforeach
-        </div>
-        
-        <div class="text-center mt-8">
-            <button onclick="showAllProducts('top-selling')" class="border-2 border-gray-200 px-12 py-3 rounded-full hover:bg-gray-50 transition">
-                View All
-            </button>
-        </div>
-    </div>
-</section>
 
 {{-- MODAL POPUP UNTUK VIEW ALL --}}
 <div id="products-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -707,52 +572,6 @@
         }
     });
 </script>
-
-{{-- CUSTOMER REVIEWS SECTION --}}
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold font-integral">
-                OUR HAPPY CUSTOMERS
-            </h2>
-            <div class="flex space-x-2">
-                <button class="p-2 border rounded-full hover:bg-white">←</button>
-                <button class="p-2 border rounded-full hover:bg-white">→</button>
-            </div>
-        </div>
-        
-        @php
-            $customers = [
-                ['name' => 'Sarah M.', 'review' => 'I\'m blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I\'ve bought has exceeded my expectations.'],
-                ['name' => 'Alex K.', 'review' => 'Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.'],
-                ['name' => 'James L.', 'review' => 'As someone who\'s always on the lookout for unique fashion pieces, I\'m thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.'],
-            ];
-        @endphp
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($customers as $customer)
-                <div class="bg-white p-6 rounded-lg border">
-                    <div class="flex text-yellow-400 mb-3">
-                        @for($j = 0; $j < 5; $j++)
-                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                            </svg>
-                        @endfor
-                    </div>
-                    <div class="flex items-center mb-3">
-                        <h4 class="font-bold">{{ $customer['name'] }}</h4>
-                        <svg class="w-5 h-5 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <p class="text-gray-600 text-sm">
-                        "{{ $customer['review'] }}"
-                    </p>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section>
 
 {{-- NEWSLETTER SECTION --}}
 <section class="py-16">
