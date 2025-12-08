@@ -438,9 +438,7 @@
     </div>
 </section>
 
-{{-- NEWSLETTER & FOOTER (tetap sama) --}}
-
-{{-- JAVASCRIPT - LETAKKAN SEBELUM </body> --}}
+{{-- JAVASCRIPT </body> --}}
 <script>
     function toggleProducts(section) {
         const hiddenProducts = document.querySelectorAll(`.${section}-hidden`);
@@ -481,6 +479,102 @@
 
 <hr class="max-w-7xl mx-auto">
 
+<<<<<<< HEAD
+=======
+{{-- MODAL POPUP UNTUK VIEW ALL --}}
+<div id="products-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+        <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+            <h3 id="modal-title" class="text-2xl font-bold font-anton">ALL PRODUCTS</h3>
+            <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+            <div id="modal-products-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {{-- Products akan dimuat via JavaScript --}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- SCRIPT JAVASCRIPT --}}
+<script>
+    // Data semua produk dari Laravel
+    const allProducts = @json($allProducts);
+    
+    function showAllProducts(type) {
+        const modal = document.getElementById('products-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const grid = document.getElementById('modal-products-grid');
+        
+        // Update title
+        if (type === 'new-arrivals') {
+            modalTitle.textContent = 'NEW ARRIVALS - ALL PRODUCTS';
+        } else if (type === 'top-selling') {
+            modalTitle.textContent = 'TOP SELLING - ALL PRODUCTS';
+        }
+        
+        // Clear grid
+        grid.innerHTML = '';
+        
+        // Render all products
+        allProducts.forEach(product => {
+            const thumbnail = product.product_images && product.product_images.length > 0 
+                ? product.product_images[0].image 
+                : null;
+            
+            const productCard = `
+                <a href="/product/${product.slug}" class="group cursor-pointer block">
+                    <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        ${thumbnail 
+                            ? `<img src="/${thumbnail}" alt="${product.name}" class="w-full h-full object-cover object-top group-hover:scale-110 transition duration-300">`
+                            : `<div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>`
+                        }
+                    </div>
+                    <h3 class="font-semibold mb-1 text-sm">${product.name}</h3>
+                    <div class="flex items-center mb-1">
+                        <div class="flex text-yellow-400 text-xs">
+                            ${'<svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>'.repeat(5)}
+                        </div>
+                        <span class="text-xs text-gray-600 ml-1">4.5/5</span>
+                    </div>
+                    <p class="font-bold">Rp ${new Intl.NumberFormat('id-ID').format(product.price)}</p>
+                </a>
+            `;
+            
+            grid.innerHTML += productCard;
+        });
+        
+        // Show modal
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById('products-modal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Close modal ketika klik di luar
+    document.getElementById('products-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    // Close modal dengan tombol ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+>>>>>>> 6e6837f7548ef4156e58c5589f7d4116be452263
 
 {{-- NEWSLETTER SECTION --}}
 <section class="py-16">
