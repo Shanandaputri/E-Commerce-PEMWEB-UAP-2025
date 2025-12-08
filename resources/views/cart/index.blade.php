@@ -4,44 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart - SHOP.CO</title>
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white">
 
-{{-- HEADER --}}
-<header class="border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <a href="{{ route('home') }}" class="text-2xl font-bold font-integral">SHOP.CO</a>
+{{-- NAVBAR SEDERHANA (copy dari homepage) --}}
+    <header class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="{{ route('home') }}" class="text-2xl font-bold">SHOP.CO</a>
 
-            <nav class="hidden md:flex md:space-x-8">
-                <a href="{{ route('home') }}" class="text-gray-900">Home</a>
-                <a href="#" class="text-gray-900">Kategori</a>
-                <a href="{{ route('customer.history') }}" class="text-gray-900">History</a>
+            <nav class="flex items-center gap-6 text-sm">
+                <a href="{{ route('home') }}" class="text-gray-600 hover:text-black">Home</a>
+                <a href="#" class="text-gray-600 hover:text-black">Kategori</a>
+                <a href="#" class="text-gray-600 hover:text-black">History</a>
             </nav>
 
-            <div class="flex items-center space-x-4">
-                <a href="{{ route('cart.index') }}" class="p-2">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                    </svg>
-                </a>
-
-                <div class="relative group">
-                    <button class="flex items-center space-x-2">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        <span class="text-sm">Profile</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+            <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">
+                Profile
+            </a>
         </div>
-    </div>
-</header>
+    </header>
 
 {{-- BREADCRUMB --}}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
