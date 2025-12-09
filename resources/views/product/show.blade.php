@@ -36,13 +36,13 @@
             
             {{-- Logo --}}
             <div class="flex items-center">
-                <a href="{{ route('home') }}" class="text-2xl font-bold font-integral">
+                <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold font-integral">
                     SHOP.CO
                 </a>
                 
                 {{-- Navigation Menu --}}
                 <nav class="hidden md:ml-10 md:flex md:space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-900 hover:text-gray-600">Home</a>
+                    <a href="{{ route('customer.dashboard') }}" class="text-gray-900 hover:text-gray-600">Home</a>
                     
                     {{-- Dropdown Kategori --}}
                     <div class="relative group">

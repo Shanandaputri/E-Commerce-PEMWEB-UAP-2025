@@ -12,9 +12,9 @@
 <header class="border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-            <a href="{{ route('home') }}" class="text-2xl font-bold font-integral">SHOP.CO</a>
+            <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold font-integral">SHOP.CO</a>
             <nav class="hidden md:flex md:space-x-8">
-                <a href="{{ route('home') }}" class="text-gray-900">Home</a>
+                <a href="{{ route('customer.dashboard') }}" class="text-gray-900">Home</a>
                 <a href="#" class="text-gray-900">Kategori</a>
                 <a href="{{ route('customer.history') }}" class="text-gray-900">History</a>
             </nav>

@@ -11,7 +11,7 @@
     {{-- HEADER --}}
     <header class="bg-white border-b">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="text-2xl font-bold">SHOP.CO</a>
+            <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">SHOP.CO</a>
             <div class="flex items-center gap-4">
                 <a href="{{ route('wallet.index') }}" class="text-gray-600 hover:text-black">← Back to Wallet</a>
             </div>

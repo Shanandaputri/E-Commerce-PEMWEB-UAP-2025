@@ -14,10 +14,10 @@
     {{-- NAVBAR --}}
     <header class="bg-white border-b">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="text-2xl font-bold">SHOP.CO</a>
+            <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">SHOP.CO</a>
 
             <nav class="flex items-center gap-6 text-sm">
-                <a href="{{ route('home') }}" class="text-gray-600 hover:text-black">Home</a>
+                <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
                 <a href="#" class="text-gray-600 hover:text-black">Kategori</a>
                 <a href="#" class="text-gray-600 hover:text-black">History</a>
             </nav>

@@ -43,7 +43,7 @@
                 {{-- Navigation Menu --}}
                 <nav class="hidden md:ml-10 md:flex md:space-x-8">
                     {{-- Home --}}
-                    <a href="{{ route('home') }}" class="text-gray-900 hover:text-gray-600">
+                    <a href="{{ route('customer.dashboard') }}" class="text-gray-900 hover:text-gray-600">
                         Home
                     </a>
 

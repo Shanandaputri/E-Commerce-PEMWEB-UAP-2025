@@ -28,41 +28,52 @@
         
     </head>
     <body class="bg-white font-poppins">
-        {{-- HEADER / NAVIGATION --}}
+{{-- HEADER / NAVIGATION --}}
 <header class="border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             
             {{-- Logo --}}
             <div class="flex items-center">
-                <a href="{{ route('home') }}" class="text-2xl font-bold font-integral">
+                <a href="{{ auth()->check() ? route('customer.dashboard') : route('login') }}" 
+                   class="text-2xl font-bold font-integral">
                     SHOP.CO
                 </a>
                 
                 {{-- Navigation Menu --}}
                 <nav class="hidden md:ml-10 md:flex md:space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-900 hover:text-gray-600">Home</a>
-                    
+
+                    {{-- Home --}}
+                    <a href="{{ auth()->check() ? route('customer.dashboard') : route('login') }}"
+                       class="text-gray-900 hover:text-gray-600">
+                        Home
+                    </a>
+
                     {{-- Dropdown Kategori --}}
                     <div class="relative group">
-                        <button class="text-gray-900 hover:text-gray-600 inline-flex items-center">
+                        <button onclick="window.location.href='{{ auth()->check() ? '#' : route('login') }}'"
+                                class="text-gray-900 hover:text-gray-600 inline-flex items-center">
                             Kategori
                             <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         
-                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        @if(auth()->check())
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible 
+                                    group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
                                 @foreach($categories as $category)
-                                    <a href="?category={{ $category->id }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="?category={{ $category->id }}"
+                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {{ $category->name }}
                                     </a>
                                 @endforeach
                             </div>
                         </div>
+                        @endif
                     </div>
-                    
 
                 </nav>
             </div>
@@ -71,12 +82,13 @@
             <div class="hidden md:flex flex-1 max-w-md mx-8">
                 <div class="w-full">
                     <div class="relative">
-                        <input type="text" 
-                               placeholder="Search for products..." 
-                               class="w-full bg-gray-50 border-0 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                        <input type="text" placeholder="Search for products..."
+                            class="w-full bg-gray-50 border-0 rounded-full py-2 pl-10 pr-4 text-sm 
+                                   focus:outline-none focus:ring-2 focus:ring-black">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
                     </div>
@@ -85,10 +97,13 @@
             
             {{-- Right Icons --}}
             <div class="flex items-center space-x-4">
-                {{-- Cart Icon --}}
-                <button class="p-2 hover:bg-gray-100 rounded-full">
+
+                {{-- Cart --}}
+                <button onclick="window.location.href='{{ auth()->check() ? route('cart.index') : route('login') }}'"
+                        class="p-2 hover:bg-gray-100 rounded-full">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                 </button>
                 
@@ -97,18 +112,20 @@
                     <div class="relative group">
                         <button class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-full">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </button>
                         
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible 
+                                    group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
                                 <div class="px-4 py-2 text-sm text-gray-700 border-b">
                                     <p class="font-semibold">{{ auth()->user()->name }}</p>
                                     <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
                                 </div>
-                                
-                                {{-- E-Wallet/Saldo --}}
+
+                                {{-- E-Wallet --}}
                                 <a href="{{ route('wallet.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <div class="flex items-center justify-between">
                                         <span>E-Wallet</span>
@@ -118,11 +135,10 @@
                                     </div>
                                 </a>
 
-                                
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile
                                 </a>
-                                
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
@@ -134,12 +150,15 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900">Login</a>
-                    <a href="{{ route('register') }}" class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Register</a>
+                    <a href="{{ route('register') }}" class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">
+                        Register
+                    </a>
                 @endauth
             </div>
         </div>
     </div>
 </header>
+
 
 {{-- HERO SECTION --}}
 <section class="bg-white">
