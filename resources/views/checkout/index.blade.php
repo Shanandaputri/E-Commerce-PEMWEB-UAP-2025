@@ -14,9 +14,9 @@
         <div class="flex items-center justify-between h-16">
             <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold font-integral">SHOP.CO</a>
             <nav class="hidden md:flex md:space-x-8">
-                <a href="{{ route('customer.dashboard') }}" class="text-gray-900">Home</a>
-                <a href="#" class="text-gray-900">Kategori</a>
-                <a href="{{ route('customer.history') }}" class="text-gray-900">History</a>
+                <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
+                <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
+                <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-black">History</a>
             </nav>
         </div>
     </div>

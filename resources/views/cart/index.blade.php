@@ -16,8 +16,8 @@
 
             <nav class="flex items-center gap-6 text-sm">
                 <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
-                <a href="#" class="text-gray-600 hover:text-black">Kategori</a>
-                <a href="#" class="text-gray-600 hover:text-black">History</a>
+                <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
+                <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-black">History</a>
             </nav>
 
             <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">

@@ -9,15 +9,22 @@ class HistoryController extends Controller
 {
     public function index()
     {
-        // ambil semua transaksi user yang login
-        $completed = Transaction::with(['details.product.productImages'])
+        // Ambil semua transaksi user yang login
+        $transactions = Transaction::with(['details.product.productImages'])
             ->where('buyer_id', Auth::id())
-            ->where('payment_status', 'paid')
             ->orderByDesc('created_at')
             ->get();
 
-        $canceled = collect();
+        // Transaksi yang sudah dibayar
+        $completed = $transactions->where('payment_status', 'paid');
 
-        return view('history', compact('completed', 'canceled'));
+        // Transaksi yang dibatalkan (kalau kamu pakai status 'canceled' atau 'failed', tinggal sesuaikan)
+        $canceled = $transactions->where('payment_status', 'canceled');
+
+        return view('customer.history.index', [
+            'transactions' => $transactions,
+            'completed'    => $completed,
+            'canceled'     => $canceled,
+        ]);
     }
 }
