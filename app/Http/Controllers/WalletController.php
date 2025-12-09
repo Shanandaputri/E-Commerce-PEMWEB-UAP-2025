@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserBalance;
 use App\Models\WalletTransaction;
-use App\Models\Transaction;
-use App\Models\StoreBalance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +20,7 @@ class WalletController extends Controller
             ['balance' => 0]
         );
 
-        $transactions = $balance->transactions()
+        $transactions = WalletTransaction::where('wallet_id', $balance->id)
             ->orderByDesc('created_at')
             ->take(10)
             ->get();
@@ -52,10 +50,12 @@ class WalletController extends Controller
             ['balance' => 0]
         );
 
+        // Generate VA Number
         $vaNumber = '1234'
             . str_pad($user->id, 4, '0', STR_PAD_LEFT)
             . rand(1000, 9999);
 
+        // Create pending transaction
         $transaction = WalletTransaction::create([
             'wallet_id'        => $wallet->id,
             'transaction_type' => 'topup',
@@ -73,15 +73,22 @@ class WalletController extends Controller
         ]);
     }
 
-    // ============== HALAMAN PAYMENT TERPUSAT ==============
-    public function paymentForm()
+    // ============== HALAMAN PAYMENT ==============
+    public function paymentForm(Request $request)
     {
-        $vaNumber = session('va_number');
-        $vaAmount = session('va_amount');
+        $vaNumber = $request->query('va');
+        $vaAmount = $request->query('amount');
+        $transactionId = $request->query('transaction_id');
+
+        if (!$vaNumber || !$vaAmount) {
+            return redirect()->route('wallet.index')
+                ->with('error', 'Data pembayaran tidak valid.');
+        }
 
         return view('wallet.payment', [
             'vaNumber' => $vaNumber,
             'vaAmount' => $vaAmount,
+            'transactionId' => $transactionId,
         ]);
     }
 
@@ -89,47 +96,46 @@ class WalletController extends Controller
     {
         $request->validate([
             'va_number' => 'required|string',
-            'amount'    => 'required|numeric|min:1',
+            'amount'    => 'required|numeric|min:10000',
+            'transaction_id' => 'required|exists:wallet_transactions,id',
         ]);
-
-        $sessionVa  = session('va_number');
-        $sessionAmt = session('va_amount');
-        $trxId      = session('va_transaction_id');
-
-        if (!$sessionVa || $request->va_number !== $sessionVa) {
-            return back()->with('error', 'Nomor VA tidak sesuai.');
-        }
-
-        if ((int) $request->amount !== (int) $sessionAmt) {
-            return back()->with('error', 'Nominal pembayaran tidak sesuai.');
-        }
 
         DB::beginTransaction();
         try {
-            $transaction = Transaction::findOrFail($trxId);
-            $transaction->update([
-                'payment_status' => 'paid',
-            ]);
+            // Find transaction
+            $transaction = WalletTransaction::findOrFail($request->transaction_id);
 
-            $subtotal = $transaction->grand_total - $transaction->shipping_cost;
+            // Validasi
+            if ($transaction->status !== 'pending') {
+                throw new \Exception('Transaksi sudah diproses sebelumnya.');
+            }
 
-            $storeBalance = StoreBalance::firstOrCreate(
-                ['store_id' => $transaction->store_id],
-                ['balance'  => 0]
-            );
-            $storeBalance->increment('balance', $subtotal);
+            if ($transaction->va_number !== $request->va_number) {
+                throw new \Exception('Nomor VA tidak sesuai.');
+            }
 
-            session()->forget(['va_number', 'va_amount', 'va_transaction_id']);
+            if ((float) $transaction->amount !== (float) $request->amount) {
+                throw new \Exception('Nominal pembayaran tidak sesuai.');
+            }
+
+            // Update transaction status
+            $transaction->update(['status' => 'success']);
+
+            // Update wallet balance
+            $wallet = UserBalance::findOrFail($transaction->wallet_id);
+            $wallet->increment('balance', $transaction->amount);
 
             DB::commit();
 
             return redirect()
-                ->route('customer.history')
-                ->with('success', 'Pembayaran VA berhasil dikonfirmasi.');
+                ->route('wallet.index')
+                ->with('success', 'Top up berhasil! Saldo Anda telah ditambahkan.');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Gagal konfirmasi pembayaran: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
         }
     }
 }

@@ -45,56 +45,51 @@
             </a>
         </section>
 
-        {{-- Riwayat --}}
-        <section class="bg-white rounded-3xl p-6 shadow-sm">
-            <h2 class="text-lg font-semibold mb-4">Riwayat</h2>
-
+        {{-- Riwayat Transaksi --}}
+        <div class="bg-white rounded-2xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold mb-4">Riwayat</h2>
+            
             @forelse($transactions as $transaction)
-                <div class="flex justify-between items-center py-4 border-b last:border-0">
-                    <div>
-                        <p class="font-semibold text-sm">
-                            {{ ucfirst($transaction->transaction_type) }}
-                            {{ $transaction->description }}
-                        </p>
+                <div class="flex justify-between items-start py-4 border-b last:border-0">
+                    <div class="flex-1">
+                        <p class="font-semibold">{{ ucfirst($transaction->transaction_type) }} {{ $transaction->description }}</p>
+                        <p class="text-sm text-gray-500">{{ $transaction->created_at->format('d M Y, H:i') }}</p>
+                        
+                        {{-- Status Badge --}}
+                        <span class="inline-block px-3 py-1 text-xs rounded-full mt-2
+                            {{ $transaction->status === 'success' ? 'bg-green-100 text-green-800' : '' }}
+                            {{ $transaction->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                            {{ $transaction->status === 'failed' ? 'bg-red-100 text-red-800' : '' }}
+                        ">
+                            {{ ucfirst($transaction->status) }}
+                        </span>
 
-                        <p class="text-xs text-gray-500">
-                            {{ $transaction->created_at->format('d M Y, H:i') }}
-                        </p>
-
-                        <div class="mt-2 flex items-center gap-2">
-                            {{-- Badge status --}}
-                            <span class="inline-block px-2 py-1 text-[11px] rounded-full
-                                @if($transaction->status === 'success') bg-green-100 text-green-700 @endif
-                                @if($transaction->status === 'pending') bg-yellow-100 text-yellow-700 @endif
-                                @if($transaction->status === 'failed') bg-red-100 text-red-700 @endif
-                            ">
-                                {{ ucfirst($transaction->status) }}
-                            </span>
-
-                            {{-- Link bayar hanya untuk topup pending --}}
-                            @if($transaction->transaction_type === 'topup' && $transaction->status === 'pending')
+                        {{-- Tombol Bayar Sekarang (Hanya untuk pending) --}}
+                        @if($transaction->status === 'pending')
+                            <div class="mt-3">
                                 <a href="{{ route('payment.form', [
-                                        'va'     => $transaction->va_number,
-                                        'amount' => $transaction->amount,
-                                    ]) }}"
-                                   class="text-[11px] font-medium text-blue-600 hover:text-blue-800">
+                                    'va' => $transaction->va_number,
+                                    'amount' => $transaction->amount,
+                                    'transaction_id' => $transaction->id
+                                ]) }}" 
+                                class="inline-block px-4 py-2 bg-black text-white text-xs font-semibold rounded-full hover:bg-gray-800 transition">
                                     Bayar sekarang
                                 </a>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
 
-                    {{-- Nominal --}}
-                    <p class="text-lg font-bold text-green-600">
-                        + {{ number_format($transaction->amount, 0, ',', '.') }} IDR
-                    </p>
+                    <div class="text-right ml-4">
+                        <p class="text-lg font-bold {{ $transaction->transaction_type === 'topup' ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $transaction->transaction_type === 'topup' ? '+' : '-' }} 
+                            {{ number_format($transaction->amount, 0, ',', '.') }} IDR
+                        </p>
+                    </div>
                 </div>
             @empty
-                <p class="text-center text-gray-500 py-6 text-sm">
-                    Belum ada transaksi.
-                </p>
+                <p class="text-center text-gray-500 py-8">Belum ada transaksi</p>
             @endforelse
-        </section>
+        </div>
 
     </main>
 

@@ -164,6 +164,7 @@
 
         let lastVa = null;
         let lastAmount = null;
+        let lastTransactionId = null;
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -199,8 +200,12 @@
                     throw new Error(data.message || 'Terjadi kesalahan saat memproses top up.');
                 }
 
-                lastVa     = data.va_number;
+                // SIMPAN SEMUA DATA
+                lastVa = data.va_number;
                 lastAmount = data.amount;
+                lastTransactionId = data.transaction_id;
+
+                console.log('Transaction ID:', lastTransactionId);
 
                 vaNumberDisplay.textContent = data.va_number;
                 vaAmountDisplay.textContent = 'Nominal: Rp ' + Number(data.amount).toLocaleString('id-ID');
@@ -231,8 +236,15 @@
         });
 
         goPayBtn.addEventListener('click', () => {
-            if (!lastVa) return;
-            const url = `{{ route('payment.form') }}?va=${encodeURIComponent(lastVa)}&amount=${encodeURIComponent(lastAmount)}`;
+            if (!lastVa || !lastAmount || !lastTransactionId) {
+                alert('Data tidak lengkap!');
+                console.error('Missing data:', { lastVa, lastAmount, lastTransactionId });
+                return;
+            }
+            
+            const url = `{{ route('payment.form') }}?va=${encodeURIComponent(lastVa)}&amount=${encodeURIComponent(lastAmount)}&transaction_id=${encodeURIComponent(lastTransactionId)}`;
+            
+            console.log('Redirecting to:', url);
             window.location.href = url;
         });
 
