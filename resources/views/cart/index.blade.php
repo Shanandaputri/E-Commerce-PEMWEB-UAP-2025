@@ -106,7 +106,7 @@
             @empty
                 <div class="text-center py-12">
                     <p class="text-gray-500 text-lg">Your cart is empty</p>
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('customer.dashboard') }}"
                        class="inline-block mt-4 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800">
                         Continue Shopping
                     </a>
