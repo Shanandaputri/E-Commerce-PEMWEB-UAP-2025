@@ -25,7 +25,7 @@
 {{-- BREADCRUMB --}}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
     <p class="text-sm text-gray-600">
-        <a href="{{ route('home') }}" class="hover:text-gray-900">Home</a>
+        <a href="{{ route('customer.dashboard') }}" class="hover:text-gray-900">Home</a>
         <span class="mx-2">></span>
         <a href="{{ route('cart.index') }}" class="hover:text-gray-900">Keranjang</a>
         <span class="mx-2">></span>
