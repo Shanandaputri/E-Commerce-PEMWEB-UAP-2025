@@ -5,15 +5,20 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
-use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HistoryController;
+use App\Models\Product;
+use App\Models\ProductCategory;
+
+// =====================
+// PUBLIC ROUTES
+// =====================
 
 // HOMEPAGE
 Route::get('/', function () {
@@ -34,9 +39,15 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-// DETAIL PRODUK
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->name('product.show');
+
+Route::get('/category/{id}', [CategoryController::class, 'show'])
+    ->name('category.show');
+
+// =====================
+// AUTH ROUTES
+// =====================
 
 // AUTO-REDIRECT DASHBOARD
 Route::get('/dashboard', function () {
@@ -142,7 +153,7 @@ Route::middleware('auth')->group(function () {
     // CART
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add'); // add to cart dari homepage
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
 
