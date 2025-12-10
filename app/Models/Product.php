@@ -29,6 +29,7 @@ class Product extends Model
     {
         return $this->belongsTo(Store::class);
     }
+
     public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class);
@@ -39,10 +40,17 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    // 🔴 Tambahan: relasi thumbnail
+    public function thumbnail()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_thumbnail', true);
+    }
+
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
     }
+
     public function productReviews()
     {
         return $this->hasMany(ProductReview::class);

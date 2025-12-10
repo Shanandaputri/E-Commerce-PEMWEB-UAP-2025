@@ -115,7 +115,31 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
     });
 
-    // SELLER (YANG PUNYA STORE)
+
+    // WALLET
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
+    Route::post('/wallet/topup', [WalletController::class, 'storeTopup'])->name('wallet.topup.store');
+
+    // PAYMENT PAGE
+    Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
+    Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
+
+    // CART
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    // CHECKOUT
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+    // HISTORY
+    Route::get('/history', [HistoryController::class, 'index'])->name('customer.history');
+
+      // SELLER (YANG PUNYA STORE)
     Route::middleware('seller')
         ->prefix('seller')
         ->name('seller.')
@@ -140,29 +164,6 @@ Route::middleware('auth')->group(function () {
             Route::put('/products/{product}', [SellerProductController::class, 'update'])->name('products.update');
             Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])->name('products.destroy');
         });
-
-    // WALLET
-    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
-    Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
-    Route::post('/wallet/topup', [WalletController::class, 'storeTopup'])->name('wallet.topup.store');
-
-    // PAYMENT PAGE
-    Route::get('/payment', [WalletController::class, 'paymentForm'])->name('payment.form');
-    Route::post('/payment/confirm', [WalletController::class, 'confirmPayment'])->name('payment.confirm');
-
-    // CART
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-    Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
-
-    // CHECKOUT
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
-
-    // HISTORY
-    Route::get('/history', [HistoryController::class, 'index'])->name('customer.history');
 });
 
 require __DIR__.'/auth.php';

@@ -53,13 +53,15 @@ class ProductController extends Controller
         // Simpan gambar
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('product_images', 'public');
+               $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('images/products'), $filename);
 
                 ProductImage::create([
                     'product_id'   => $product->id,
-                    'image'        => $path,
-                    'is_thumbnail' => $index === 0, // gambar pertama dijadikan thumbnail
+                    'image'        => 'images/products/' . $filename,
+                    'is_thumbnail' => $index === 0,
                 ]);
+
             }
         }
 
@@ -99,15 +101,18 @@ class ProductController extends Controller
         // kalau upload gambar baru, tambahkan (biar simple, nggak hapus yang lama)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('product_images', 'public');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('images/products'), $filename);
 
                 ProductImage::create([
                     'product_id'   => $product->id,
-                    'image'        => $path,
-                    'is_thumbnail' => false, // nanti kamu bisa bikin UI set thumbnail
+                    'image'        => 'images/products/' . $filename,
+                    'is_thumbnail' => false, // thumbnail tetap yang lama, atau atur manual nanti
                 ]);
             }
         }
+
+
 
         return redirect()->route('seller.products.index')
             ->with('status', 'Produk berhasil diperbarui.');
