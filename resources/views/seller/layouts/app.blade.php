@@ -32,7 +32,6 @@
                 <a href="{{ route('seller.dashboard') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg
                           {{ request()->routeIs('seller.dashboard') ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-4' : 'hover:bg-gray-50' }}">
-                    <span>🏠</span>
                     <span>Dashboard</span>
                 </a>
 
@@ -40,7 +39,6 @@
                 <a href="{{ route('seller.categories.index') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg
                           {{ request()->routeIs('seller.categories.*') ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-4' : 'hover:bg-gray-50' }}">
-                    <span>📁</span>
                     <span>Manajemen Kategori</span>
                 </a>
 
@@ -48,14 +46,13 @@
                 <a href="{{ route('seller.products.index') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg
                           {{ request()->routeIs('seller.products.*') ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-4' : 'hover:bg-gray-50' }}">
-                    <span>🛍️</span>
                     <span>Manajemen Produk</span>
                 </a>
 
                 {{-- PESANAN (belum ada route, jadi # dulu) --}}
                 <a href="#"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50">
-                    <span>📦</span>
+
                     <span>Manajemen Pesanan</span>
                 </a>
 
@@ -63,7 +60,6 @@
                 <a href="{{ route('profile.edit') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg
                           {{ request()->routeIs('profile.edit') ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-4' : 'hover:bg-gray-50' }}">
-                    <span>👤</span>
                     <span>Profil</span>
                 </a>
             </nav>
@@ -73,7 +69,6 @@
         <form method="POST" action="{{ route('logout') }}" class="mt-6">
             @csrf
             <button class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50">
-                <span>🚪</span>
                 <span>Logout</span>
             </button>
         </form>
