@@ -15,6 +15,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HistoryController;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Http\Controllers\Admin\StoreVerificationController;
+use App\Http\Controllers\Admin\UserManagementController;
 
 // =====================
 // PUBLIC ROUTES
@@ -164,6 +166,32 @@ Route::middleware('auth')->group(function () {
             Route::put('/products/{product}', [SellerProductController::class, 'update'])->name('products.update');
             Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])->name('products.destroy');
         });
+    
+    // ADMIN
+Route::middleware('role:admin')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+
+        // VERIFIKASI TOKO
+        Route::get('/verification', [StoreVerificationController::class, 'index'])
+            ->name('verification.index');
+        Route::post('/verification/{store}/approve', [StoreVerificationController::class, 'approve'])
+            ->name('verification.approve');
+        Route::post('/verification/{store}/reject', [StoreVerificationController::class, 'reject'])
+            ->name('verification.reject');
+
+        // MANAJEMEN USER & STORE
+        Route::get('/users', [UserManagementController::class, 'index'])
+            ->name('users.index');
+        Route::patch('/users/{user}/role', [UserManagementController::class, 'updateRole'])
+            ->name('users.updateRole');
+        Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])
+            ->name('users.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
