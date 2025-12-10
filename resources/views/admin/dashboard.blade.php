@@ -3,7 +3,7 @@
     <div class="h-screen bg-gray-100">
         <div class="flex h-full">
 
-            {{-- ===================== SIDEBAR ADMIN ===================== --}}
+            {{-- SIDEBAR ADMIN --}}
             <aside class="w-64 bg-white border-r flex flex-col">
 
                 {{-- Header logo / info admin --}}
@@ -76,7 +76,7 @@
                 </div>
             </aside>
 
-            {{-- ===================== MAIN CONTENT ===================== --}}
+            {{-- MAIN CONTENT --}}
             <main class="flex-1 overflow-y-auto">
                 <div class="max-w-6xl mx-auto px-8 py-8">
 

@@ -2,7 +2,7 @@
     <div class="h-screen bg-gray-100">
         <div class="flex h-full">
 
-            {{-- ===================== SIDEBAR (SAMA) ===================== --}}
+            {{-- SIDEBAR --}}
             <aside class="w-64 bg-white border-r flex flex-col">
                 <div class="px-6 py-6 border-b">
                     <div class="flex items-center gap-3">
@@ -65,7 +65,7 @@
                 </div>
             </aside>
 
-            {{-- ===================== MAIN CONTENT ===================== --}}
+            {{-- MAIN CONTENT --}}
             <main class="flex-1 overflow-y-auto">
                 <div class="max-w-6xl mx-auto px-8 py-8">
 
