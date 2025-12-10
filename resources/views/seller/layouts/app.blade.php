@@ -49,12 +49,14 @@
                     <span>Manajemen Produk</span>
                 </a>
 
-                {{-- PESANAN (belum ada route, jadi # dulu) --}}
-                <a href="#"
-                   class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50">
-
+               
+                {{-- PESANAN --}}
+                <a href="{{ route('seller.orders.index') }}"
+                class="flex items-center gap-2 px-3 py-2 rounded-lg
+                        {{ request()->routeIs('seller.orders.*') ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-4' : 'hover:bg-gray-50' }}">
                     <span>Manajemen Pesanan</span>
                 </a>
+
 
                 {{-- PROFIL --}}
                 <a href="{{ route('profile.edit') }}"

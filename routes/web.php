@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
+use App\Http\Controllers\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 
 // HOMEPAGE
 Route::get('/', function () {
+     Auth::logout();
     $categories = ProductCategory::all();
 
     $allProducts = Product::with(['productImages' => function ($q) {
@@ -165,6 +168,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/products/{product}/edit', [SellerProductController::class, 'edit'])->name('products.edit');
             Route::put('/products/{product}', [SellerProductController::class, 'update'])->name('products.update');
             Route::delete('/products/{product}', [SellerProductController::class, 'destroy'])->name('products.destroy');
+
+            // Orders
+            Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{transaction}', [SellerOrderController::class, 'show'])->name('orders.show');
+            Route::patch('/orders/{transaction}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    
         });
     
     // ADMIN
