@@ -4,21 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - SHOP.CO</title>
+
+    {{-- Fonts --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=integral-cf:400,700|satoshi:400,500,700&display=swap" rel="stylesheet" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body { font-family: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+        .font-integral { font-family: 'Integral CF', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+    </style>
 </head>
 <body class="bg-white">
 
 {{-- HEADER --}}
-<header class="border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold font-integral">SHOP.CO</a>
-            <nav class="hidden md:flex md:space-x-8">
-                <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
-                <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
-                <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-black">History</a>
-            </nav>
-        </div>
+<header class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        {{-- Logo --}}
+        <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">
+            SHOP.CO
+        </a>
+
+        {{-- Profile --}}
+        <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">
+            Profile
+        </a>
     </div>
 </header>
 

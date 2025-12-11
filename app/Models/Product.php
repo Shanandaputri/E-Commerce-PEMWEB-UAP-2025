@@ -40,7 +40,7 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    // 🔴 Tambahan: relasi thumbnail
+    // relasi thumbnail
     public function thumbnail()
     {
         return $this->hasOne(ProductImage::class)->where('is_thumbnail', true);

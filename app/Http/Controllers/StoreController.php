@@ -49,14 +49,13 @@ class StoreController extends Controller
             'logo'        => ['nullable', 'image', 'max:2048'], // 2MB
         ]);
 
-        // Handle logo (kalau di-upload)
+        // Handle logo
         $logoPath = null;
 
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('store_logos', 'public');
         } else {
-            // boleh pakai default image kalau mau
-            $logoPath = 'default-store-logo.png';
+            $logoPath = 'store_logos/default_logo.png'; // logo default
         }
 
         // Simpan ke tabel stores
@@ -66,11 +65,11 @@ class StoreController extends Controller
             'logo'        => $logoPath,
             'about'       => $validated['about'] ?? null,
             'phone'       => $validated['phone'],
-            'address_id'  => null, // belum dipakai, boleh null
+            'address_id'  => null,
             'city'        => $validated['city'],
             'address'     => $validated['address'],
             'postal_code' => $validated['postal_code'],
-            'is_verified' => false, // default: belum diverifikasi admin
+            'is_verified' => false, // default
         ]);
 
         return redirect()

@@ -8,16 +8,17 @@
 </head>
 <body class="bg-gray-50">
 
-    {{-- NAVBAR SEDERHANA (copy dari homepage) --}}
+    {{-- NAVBAR --}}
     <header class="bg-white border-b">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">SHOP.CO</a>
 
             <nav class="flex items-center gap-6 text-sm">
-                <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
-                <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
-                <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-black">History</a>
-            </nav>
+                <nav class="flex items-center gap-6 text-sm">
+                    <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
+                    <a href="{{ route('categories.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
+                    <a href="{{ route('customer.history') }}" class="text-gray-600 hover:text-black">History</a>
+                </nav>
 
             <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">
                 Profile
@@ -64,7 +65,7 @@
                             {{ ucfirst($transaction->status) }}
                         </span>
 
-                        {{-- Tombol Bayar Sekarang (Hanya untuk pending) --}}
+                        {{-- Tombol Bayar Sekarang --}}
                         @if($transaction->status === 'pending')
                             <div class="mt-3">
                                 <a href="{{ route('payment.form', [

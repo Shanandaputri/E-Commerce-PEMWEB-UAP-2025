@@ -17,10 +17,11 @@
             <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">SHOP.CO</a>
 
             <nav class="flex items-center gap-6 text-sm">
-                <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
-                <a href="{{ route('cart.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
-                <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-black">History</a>
-            </nav>
+                <nav class="flex items-center gap-6 text-sm">
+                    <a href="{{ route('customer.dashboard') }}" class="text-gray-600 hover:text-black">Home</a>
+                    <a href="{{ route('categories.index') }}" class="text-gray-600 hover:text-black">Kategori</a>
+                    <a href="{{ route('customer.history') }}" class="text-gray-600 hover:text-black">History</a>
+                </nav>
 
             <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">
                 Profile
@@ -31,7 +32,7 @@
     {{-- KONTEN TOP UP --}}
     <main class="min-h-screen bg-gray-50 py-10">
         <div class="max-w-5xl mx-auto px-4">
-            {{-- breadcrumb kecil --}}
+            {{-- breadcrumb --}}
             <p class="text-sm text-gray-500 mb-3">e-wallet</p>
 
             {{-- CARD TOP UP --}}

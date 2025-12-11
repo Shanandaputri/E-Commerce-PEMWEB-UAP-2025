@@ -12,15 +12,15 @@ class TransactionController extends Controller
     {
         // Transaksi SELESAI
         $completed = Transaction::with(['details.product'])
-            ->where('buyer_id', Auth::id())               // kolom di tabel: buyer_id
-            ->where('payment_status', 'completed')        // sesuaikan dengan nilai di DB
+            ->where('buyer_id', Auth::id())
+            ->where('payment_status', 'completed')
             ->latest()
             ->get();
 
         // Transaksi DIBATALKAN
         $canceled = Transaction::with(['details.product'])
             ->where('buyer_id', Auth::id())
-            ->where('payment_status', 'canceled')         // sesuaikan juga
+            ->where('payment_status', 'canceled')
             ->latest()
             ->get();
 

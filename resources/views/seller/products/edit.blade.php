@@ -13,8 +13,6 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- sama seperti form create, cuma value diisi dari $product --}}
-
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Nama Produk</label>
                         <input type="text" name="name" class="mt-1 block w-full border rounded p-2"

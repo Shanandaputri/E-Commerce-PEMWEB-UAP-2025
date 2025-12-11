@@ -39,8 +39,10 @@ class CheckoutController extends Controller
             'payment_method' => 'required|in:wallet,va',
         ]);
 
+        $user = auth()->user();
+
         $carts = Cart::with('product.store')
-            ->where('user_id', auth()->id())
+            ->where('user_id', $user->id)
             ->get();
 
         if ($carts->isEmpty()) {
@@ -52,15 +54,43 @@ class CheckoutController extends Controller
         $grandTotal  = $subtotal + $deliveryFee;
 
         $paymentMethod = $request->payment_method;
-        $paymentStatus = 'unpaid';   // default
+        $paymentStatus = 'unpaid';
         $vaNumber      = null;
+
+        if ($paymentMethod === 'va') {
+            $vaNumber = '888' . random_int(10000000, 99999999);
+        }
 
         DB::beginTransaction();
 
         try {
-            // =============== BAYAR PAKAI WALLET (E-WALLET) ===============
+            //  ALAMAT 
+            $address = Address::where('user_id', $user->id)
+                ->where('is_primary', true)
+                ->first();
+
+            if (!$address) {
+                $address = Address::create([
+                    'user_id'     => $user->id,
+                    'label'       => 'Alamat Checkout',
+                    'recipient'   => $request->recipient_name,
+                    'phone'       => '081234567890',
+                    'address'     => $request->address,
+                    'city'        => 'Jakarta',
+                    'province'    => 'DKI Jakarta',
+                    'postal_code' => '12345',
+                    'is_primary'  => true,
+                ]);
+            } else {
+                $address->update([
+                    'recipient' => $request->recipient_name,
+                    'address'   => $request->address,
+                ]);
+            }
+
+            //  WALLET PAYMENT 
             if ($paymentMethod === 'wallet') {
-                $userBalance = UserBalance::where('user_id', auth()->id())
+                $userBalance = UserBalance::where('user_id', $user->id)
                     ->lockForUpdate()
                     ->first();
 
@@ -79,36 +109,13 @@ class CheckoutController extends Controller
                 $paymentStatus = 'paid';
             }
 
-            // =============== AMBIL / BUAT ALAMAT (addresses) ===============
-            $address = Address::where('user_id', auth()->id())
-                ->where('is_primary', true)
-                ->first();
-
-            if (!$address) {
-                $address = Address::create([
-                    'user_id'     => auth()->id(),
-                    'label'       => 'Alamat Checkout',
-                    'recipient'   => $request->recipient_name,
-                    'phone'       => '081234567890',
-                    'address'     => $request->address,
-                    'city'        => 'Jakarta',
-                    'province'    => 'DKI Jakarta',
-                    'postal_code' => '12345',
-                    'is_primary'  => true,
-                ]);
-            } else {
-                $address->update([
-                    'recipient' => $request->recipient_name,
-                    'address'   => $request->address,
-                ]);
-            }
-
-            // =============== BUAT TRANSACTION ===============
+            //  BUAT TRANSACTION 
             $transaction = Transaction::create([
                 'code'            => 'TRX-' . strtoupper(Str::random(10)),
-                'buyer_id'        => auth()->id(),
+                'buyer_id'        => $user->id,
                 'store_id'        => $carts->first()->product->store_id,
                 'address_id'      => $address->id,
+                'recipient_name'  => $request->recipient_name,
                 'address'         => $address->address,
                 'city'            => $address->city,
                 'postal_code'     => $address->postal_code,
@@ -119,9 +126,11 @@ class CheckoutController extends Controller
                 'tax'             => 0,
                 'grand_total'     => $grandTotal,
                 'payment_status'  => $paymentStatus,
+                'payment_method'  => $paymentMethod,
+                'va_number'       => $vaNumber,
             ]);
 
-            // =============== DETAIL TRANSAKSI ===============
+            //  DETAIL TRANSAKSI 
             foreach ($carts as $cart) {
                 TransactionDetail::create([
                     'transaction_id' => $transaction->id,
@@ -132,41 +141,31 @@ class CheckoutController extends Controller
 
                 $cart->product->decrement('stock', $cart->quantity);
             }
-
-            // =============== SALDO TOKO (KALAU SUDAH PAID) ===============
+            //  UPDATE SALDO TOKO 
             if ($paymentStatus === 'paid') {
                 $storeBalance = StoreBalance::firstOrCreate(
                     ['store_id' => $transaction->store_id],
                     ['balance'  => 0]
                 );
 
-                $storeBalance->increment('balance', $subtotal);
+                $productTotal = $transaction->transactionDetails()->sum('subtotal');
+                $storeBalance->increment('balance', $productTotal);
             }
 
-            // Hapus cart user
-            Cart::where('user_id', auth()->id())->delete();
-
-            // ====== GENERATE VA JIKA METODE VA ======
-            if ($paymentMethod === 'va') {
-                $vaNumber = '888' . random_int(10000000, 99999999);
-
-                session([
-                    'va_number'         => $vaNumber,
-                    'va_amount'         => $grandTotal,
-                    'va_transaction_id' => $transaction->id,
-                ]);
-            }
+            Cart::where('user_id', $user->id)->delete();
 
             DB::commit();
 
-            // Kalau VA → ke halaman Payment
+            // REDIRECT SESUAI METODE 
             if ($paymentMethod === 'va') {
-                return redirect()
-                    ->route('payment.form')
-                    ->with('success', 'Order dibuat. Silakan lakukan pembayaran via VA di halaman Payment.');
+                return redirect()->route('payment.form', [
+                    'source'        => 'checkout',
+                    'va'            => $vaNumber,
+                    'amount'        => $grandTotal,
+                    'transaction_id'=> $transaction->id,
+                ])->with('success', 'Order dibuat. Silakan lakukan pembayaran via VA.');
             }
 
-            // Kalau Wallet → langsung ke history
             return redirect()
                 ->route('customer.history')
                 ->with('success', 'Order placed successfully!');

@@ -34,13 +34,13 @@ class Transaction extends Model
         'va_number',
     ];
 
-    // 🧍‍♂️ Pembeli
+    // Pembeli
     public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
     }
 
-    // 🏪 Store pemilik transaksi
+    // Store pemilik transaksi
     public function store()
     {
         return $this->belongsTo(Store::class);
@@ -48,12 +48,12 @@ class Transaction extends Model
 
     public function details()
     {
-        // alias supaya kode lama yang pakai ->details tetap jalan
+        // alias supaya kode lama tetap jalan
         return $this->hasMany(TransactionDetail::class);
     }
 
 
-    // 📦 Detail item pesanan
+    // Detail item pesanan
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);

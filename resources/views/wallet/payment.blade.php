@@ -8,15 +8,21 @@
 </head>
 <body class="bg-gray-50">
 
-    {{-- HEADER --}}
-    <header class="bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">SHOP.CO</a>
-            <div class="flex items-center gap-4">
-                <a href="{{ route('wallet.index') }}" class="text-gray-600 hover:text-black">← Back to Wallet</a>
-            </div>
-        </div>
-    </header>
+
+{{-- HEADER --}}
+<header class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        {{-- Logo --}}
+        <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold">
+            SHOP.CO
+        </a>
+
+        {{-- Profile --}}
+        <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black text-sm">
+            Profile
+        </a>
+    </div>
+</header>
 
     <div class="min-h-screen flex items-center justify-center p-4">
         
@@ -55,7 +61,9 @@
             <form action="{{ route('payment.confirm') }}" method="POST">
                 @csrf
                 
+                {{-- hidden buat identitas transaksi & mode --}}
                 <input type="hidden" name="transaction_id" value="{{ $transactionId ?? '' }}">
+                <input type="hidden" name="mode" value="{{ $mode ?? 'topup' }}">
 
                 {{-- Nomor VA --}}
                 <div class="mb-4">

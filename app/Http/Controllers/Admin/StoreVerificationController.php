@@ -11,7 +11,7 @@ class StoreVerificationController extends Controller
     // List toko yang belum terverifikasi
     public function index()
     {
-        $pendingStores = Store::with('owner') // asumsi relasi owner() -> user
+        $pendingStores = Store::with('owner')
             ->where('is_verified', false)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -19,7 +19,7 @@ class StoreVerificationController extends Controller
         return view('admin.verification', compact('pendingStores'));
     }
 
-    // Approve / verifikasi toko
+    // verifikasi toko
     public function approve(Store $store)
     {
         $store->is_verified = true;
@@ -28,15 +28,11 @@ class StoreVerificationController extends Controller
         return back()->with('success', "Toko {$store->name} berhasil diverifikasi.");
     }
 
-    // Reject toko (simple: hapus atau tandai ditolak)
+    // Reject toko
     public function reject(Store $store)
     {
-        // Versi simpel: hapus toko
-        // $store->delete();
-
-        // Versi aman: tambahkan kolom status kalau ada (misal status = 'rejected')
         $store->is_verified = false;
-        $store->status = 'rejected'; // kalau kolomnya ada
+        $store->status = 'rejected';
         $store->save();
 
         return back()->with('success', "Toko {$store->name} ditolak.");

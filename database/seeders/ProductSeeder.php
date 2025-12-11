@@ -11,7 +11,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $products = [
-            // ===== KATEGORI 1 =====
+            // KATEGORI 1
             [
                 'name'        => 'POLO RAJUTAN KOMBINASI',
                 'category_id' => 1,
@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Polo rajutan dengan komposisi 95% wol yang hangat dan premium, ideal untuk cuaca dingin dan tampilan elegan.',
             ],
 
-            // ===== KATEGORI 2 =====
+            // KATEGORI 2
             [
                 'name'        => 'JAKET RAJUTAN BOUCLÉ',
                 'category_id' => 2,
@@ -63,7 +63,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Jaket bomber berbahan wol ZW dengan desain modern yang hangat dan nyaman dipakai sepanjang hari.',
             ],
 
-            // ===== KATEGORI 3 =====
+            // KATEGORI 3
             [
                 'name'        => 'KEMEJA SATIN ZW',
                 'category_id' => 3,
@@ -89,7 +89,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Atasan dengan potongan jatuh asimetris yang unik, memberikan siluet modern dan stylish.',
             ],
 
-            // ===== KATEGORI 4 =====
+            // KATEGORI 4
             [
                 'name'        => 'JEANS ZW WIDE LEG TIRO MD',
                 'category_id' => 4,
@@ -115,7 +115,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Jeans TRF skinny dengan potongan pinggang tinggi (tiro alto) yang membentuk siluet tubuh dengan maksimal.',
             ],
 
-            // ===== KATEGORI 5 (AKSESORIS) =====
+            // KATEGORI 5
             [
                 'name'        => 'ANTING BUNDAR BERKILAU',
                 'category_id' => 5,

@@ -1,4 +1,3 @@
-<!-- Settings Dropdown -->
 <div class="hidden sm:flex sm:items-center sm:ms-6">
     @auth
         <x-dropdown align="right" width="48">
@@ -36,7 +35,7 @@
             </x-slot>
         </x-dropdown>
     @else
-        {{-- Kalau belum login, tampilkan tombol Login / Register --}}
+        {{-- tampilkan login dan register untuk guest --}}
         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline me-3">
             Login
         </a>

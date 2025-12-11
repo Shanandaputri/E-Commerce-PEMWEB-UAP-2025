@@ -28,7 +28,7 @@
         
     </head>
     <body class="bg-white font-poppins">
-{{-- HEADER / NAVIGATION --}}
+{{-- HEADER & NAVIGATION --}}
 <header class="border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -40,7 +40,7 @@
                     SHOP.CO
                 </a>
                 
-                {{-- Navigation Menu --}}
+                {{-- Navi --}}
                 <nav class="hidden md:ml-10 md:flex md:space-x-8">
 
                     {{-- Home --}}
@@ -82,75 +82,64 @@
             <div class="hidden md:flex flex-1 max-w-md mx-8">
                 <div class="w-full">
                     <div class="relative">
-                        <input type="text" placeholder="Search for products..."
+                        <input
+                            id="guest-product-search"
+                            type="text"
+                            placeholder="Search for products..."
                             class="w-full bg-gray-50 border-0 rounded-full py-2 pl-10 pr-4 text-sm 
-                                   focus:outline-none focus:ring-2 focus:ring-black">
+                                focus:outline-none focus:ring-2 focus:ring-black"
+                        >
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
+                        </div>
+
+                        {{-- RESULT DROPDOWN --}}
+                        <div
+                            id="guest-search-results"
+                            class="absolute mt-2 w-full bg-white rounded-2xl shadow-lg border border-gray-100
+                                max-h-80 overflow-y-auto z-50 hidden"
+                        >
                         </div>
                     </div>
                 </div>
             </div>
             
             {{-- Right Icons --}}
-            <div class="flex items-center space-x-4">
-
-                {{-- Cart --}}
-                <button onclick="window.location.href='{{ auth()->check() ? route('cart.index') : route('login') }}'"
+            <div class="flex items-center gap-3">
+                {{-- Icon Keranjang --}}
+                <button onclick="window.location.href='{{ route('cart.index') }}'"
                         class="p-2 hover:bg-gray-100 rounded-full">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
                 </button>
-                
+
                 {{-- Profile Dropdown --}}
                 @auth
                     <div class="relative group">
                         <button class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-full">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </button>
-                        
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible 
-                                    group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                            <div class="py-1">
-                                <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                                    <p class="font-semibold">{{ auth()->user()->name }}</p>
-                                    <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
-                                </div>
 
-                                {{-- E-Wallet --}}
-                                <a href="{{ route('wallet.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    <div class="flex items-center justify-between">
-                                        <span>E-Wallet</span>
-                                        <span class="font-semibold text-green-600">
-                                            Rp {{ number_format(auth()->user()->wallet->balance ?? 0, 0, ',', '.') }}
-                                        </span>
-                                    </div>
-                                </a>
-
-                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    Profile
-                                </a>
-
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
+                        <div
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible
+                                group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            ...
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900">Login</a>
-                    <a href="{{ route('register') }}" class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900">
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}"
+                    class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">
                         Register
                     </a>
                 @endauth
@@ -158,7 +147,6 @@
         </div>
     </div>
 </header>
-
 
 {{-- HERO SECTION --}}
 <section class="bg-white">
@@ -247,7 +235,6 @@
         
         {{-- Grid Products --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="new-arrivals-grid">
-            {{-- Tampilkan 4 produk pertama --}}
             @foreach($newArrivals as $product)
             <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
                 <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -279,7 +266,6 @@
             </a>
             @endforeach
 
-            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
             @foreach($allProducts->skip(4) as $product)
             <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block hidden new-arrivals-hidden">
                 <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -332,7 +318,6 @@
         
         {{-- Grid Products --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="top-selling-grid">
-            {{-- Tampilkan 4 produk pertama --}}
             @foreach($topSelling as $product)
                 <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block">
                     <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -364,7 +349,6 @@
                 </a>
             @endforeach
 
-            {{-- Hidden products (akan ditampilkan saat klik View All) --}}
             @foreach($allProducts->skip(8)->take(20) as $product)
                 <a href="{{ route('product.show', $product->slug) }}" class="group cursor-pointer block hidden top-selling-hidden">
                     <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-3">
@@ -407,7 +391,7 @@
 </section>
 
 
-{{-- JAVASCRIPT - LETAKKAN SEBELUM </body> --}}
+{{-- JAVASCRIPT --}}
 <script>
     function toggleProducts(section) {
         const hiddenProducts = document.querySelectorAll(`.${section}-hidden`);
@@ -433,6 +417,100 @@
     }
 </script>
 
+<script>
+(function () {
+    const input     = document.getElementById('guest-product-search');
+    const box       = document.getElementById('guest-search-results');
+    const wrapper   = input ? input.closest('.relative') : null;
+
+    const searchUrl = "{{ route('products.search') }}";
+    const loginUrl  = "{{ route('login') }}";
+
+    if (!input || !box) return;
+
+    let timer = null;
+
+    function clearResults() {
+        box.innerHTML = '';
+        box.classList.add('hidden');
+    }
+
+    function renderResults(items) {
+        if (!items.length) {
+            box.innerHTML = `
+                <div class="px-4 py-3 text-sm text-gray-500">
+                    Tidak ada produk ditemukan.
+                </div>
+            `;
+            box.classList.remove('hidden');
+            return;
+        }
+
+        box.innerHTML = items.map(item => `
+            <button
+                type="button"
+                class="search-result-item w-full text-left flex items-center px-4 py-2.5 text-sm 
+                       hover:bg-gray-50 border-b last:border-b-0"
+            >
+                <div class="w-10 h-12 rounded-md bg-gray-100 overflow-hidden mr-3 flex-shrink-0">
+                    ${item.image
+                        ? `<img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">`
+                        : `<div class="w-full h-full flex items-center justify-center text-xs text-gray-400">No img</div>`
+                    }
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-gray-800 line-clamp-1">${item.name}</p>
+                    <p class="text-xs text-gray-500">Rp ${item.price}</p>
+                </div>
+            </button>
+        `).join('');
+
+        box.classList.remove('hidden');
+    }
+
+    async function doSearch(term) {
+        if (!term || term.trim().length === 0) {
+            clearResults();
+            return;
+        }
+
+        try {
+            const response = await fetch(`${searchUrl}?q=${encodeURIComponent(term)}`);
+            if (!response.ok) throw new Error('Network error');
+
+            const data = await response.json();
+            renderResults(data);
+        } catch (e) {
+            console.error(e);
+            clearResults();
+        }
+    }
+
+    box.addEventListener('click', function (e) {
+        const item = e.target.closest('.search-result-item');
+        if (!item) return;
+
+        window.location.href = loginUrl;
+    });
+
+    input.addEventListener('input', function (e) {
+        const term = e.target.value;
+
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            doSearch(term);
+        }, 300);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!wrapper) return;
+        if (!wrapper.contains(e.target)) {
+            clearResults();
+        }
+    });
+})();
+</script>
+
 <style>
     @keyframes fadeIn {
         from {
@@ -448,7 +526,7 @@
 
 <hr class="max-w-7xl mx-auto">
 
-{{-- MODAL POPUP UNTUK VIEW ALL --}}
+{{-- MODAL VIEW ALL --}}
 <div id="products-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
@@ -462,7 +540,6 @@
         
         <div class="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
             <div id="modal-products-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {{-- Products akan dimuat via JavaScript --}}
             </div>
         </div>
     </div>
@@ -470,7 +547,6 @@
 
 {{-- SCRIPT JAVASCRIPT --}}
 <script>
-    // Data semua produk dari Laravel
     const allProducts = @json($allProducts);
     
     function showAllProducts(type) {

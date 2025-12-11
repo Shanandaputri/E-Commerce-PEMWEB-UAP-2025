@@ -98,7 +98,6 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        // kalau upload gambar baru, tambahkan (biar simple, nggak hapus yang lama)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -107,7 +106,7 @@ class ProductController extends Controller
                 ProductImage::create([
                     'product_id'   => $product->id,
                     'image'        => 'images/products/' . $filename,
-                    'is_thumbnail' => false, // thumbnail tetap yang lama, atau atur manual nanti
+                    'is_thumbnail' => false,
                 ]);
             }
         }

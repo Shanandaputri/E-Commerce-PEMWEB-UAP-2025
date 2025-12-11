@@ -18,7 +18,7 @@ class HistoryController extends Controller
         // Transaksi yang sudah dibayar
         $completed = $transactions->where('payment_status', 'paid');
 
-        // Transaksi yang dibatalkan (kalau kamu pakai status 'canceled' atau 'failed', tinggal sesuaikan)
+        // Transaksi yang dibatalkan
         $canceled = $transactions->where('payment_status', 'canceled');
 
         return view('customer.history.index', [

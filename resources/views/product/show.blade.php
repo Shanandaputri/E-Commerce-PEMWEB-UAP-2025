@@ -34,65 +34,72 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             
-            {{-- Logo --}}
+            {{-- Logo & Nav --}}
             <div class="flex items-center">
                 <a href="{{ route('customer.dashboard') }}" class="text-2xl font-bold font-integral">
                     SHOP.CO
                 </a>
                 
-                {{-- Navigation Menu --}}
                 <nav class="hidden md:ml-10 md:flex md:space-x-8">
                     <a href="{{ route('customer.dashboard') }}" class="text-gray-900 hover:text-gray-600">Home</a>
-                    
-                    {{-- Dropdown Kategori --}}
+
                     <div class="relative group">
-                        <button class="text-gray-900 hover:text-gray-600 inline-flex items-center">
-                            Kategori
+                        <a href="{{ route('categories.index') }}"
+                        class="text-gray-900 hover:text-gray-600 inline-flex items-center">
+                            <span>Kategori</span>
                             <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
                             </svg>
-                        </button>
-                        
-                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        </a>
+
+                        <div
+                            class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible
+                                group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
                                 @foreach($categories as $category)
-                                    <a href="?category={{ $category->id }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a
+                                        href="{{ route('category.show', $category->id) }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    >
                                         {{ $category->name }}
                                     </a>
                                 @endforeach
                             </div>
                         </div>
                     </div>
-                    
                 </nav>
             </div>
-            
-            {{-- Right Icons --}}
-            <div class="flex items-center space-x-4">
-                {{-- Cart Icon --}}
-                <button class="p-2 hover:bg-gray-100 rounded-full">
+
+            {{-- Keranjang & Profile --}}
+            <div class="flex items-center gap-4">
+
+                {{-- Icon Keranjang --}}
+                <button onclick="window.location.href='{{ route('cart.index') }}'"
+                        class="p-2 hover:bg-gray-100 rounded-full">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
                 </button>
-                
-                {{-- Profile Dropdown --}}
+
+                {{-- Profile --}}
                 @auth
                     <div class="relative group">
                         <button class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-full">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
                         </button>
-                        
+
                         <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                             <div class="py-1">
                                 <div class="px-4 py-2 text-sm text-gray-700 border-b">
                                     <p class="font-semibold">{{ auth()->user()->name }}</p>
                                     <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
                                 </div>
-                                
-                                {{-- E-Wallet/Saldo --}}
+
                                 <a href="{{ route('wallet.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <div class="flex items-center justify-between">
                                         <span>E-Wallet</span>
@@ -102,11 +109,10 @@
                                     </div>
                                 </a>
 
-                                
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile
                                 </a>
-                                
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
@@ -118,14 +124,17 @@
                     </div>
                 @else
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900">Login</a>
-                    <a href="{{ route('register') }}" class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">Register</a>
+                    <a href="{{ route('register') }}" class="text-sm bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800">
+                        Register
+                    </a>
                 @endauth
             </div>
+
         </div>
     </div>
 </header>
 
-    {{-- ===================== PRODUCT DETAIL SECTION ========================= --}}
+    {{-- PRODUCT DETAIL SECTION --}}
     <main class="bg-white pt-6 pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -140,10 +149,10 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
-                {{-- LEFT: GALLERY --}}
+                {{-- GALLERY --}}
                 <div class="flex gap-4">
 
-                    {{-- Thumbnails (Vertical) --}}
+                    {{-- Thumbnails --}}
                     <div class="flex flex-col gap-3 w-28">
                         @foreach($product->productImages as $image)
                         <button
@@ -182,10 +191,10 @@
 
                 </div>
 
-                {{-- RIGHT: INFO --}}
+                {{-- INFO --}}
                 <div class="flex flex-col gap-5">
                     
-                    {{-- Sold by (Store name) --}}
+                    {{-- Sold by --}}
                     @if($product->store)
                         <p class="text-xs text-gray-500 uppercase tracking-wider">
                             SOLD BY <span class="font-semibold text-gray-800">{{ $product->store->name }}</span>
@@ -197,7 +206,7 @@
                         {{ $product->name }}
                     </h1>
 
-                    {{-- Rating + review count --}}
+                    {{-- Rating & review count --}}
                     <div class="flex items-center gap-2">
                         <div class="flex text-yellow-400">
                             @for($i = 0; $i < 5; $i++)
@@ -274,7 +283,7 @@
             <br>
             
 
-            {{-- Qty + Add to Cart --}}
+            {{-- Qty & add to cart --}}
             <div class="flex items-center gap-4 mt-2">
                 <div class="flex items-center bg-gray-100 rounded-full px-5 py-3">
                     <button type="button" id="qtyMinus" class="px-3 text-lg font-medium hover:opacity-70">−</button>
@@ -300,7 +309,7 @@
         });
     });
 
-    // ====== PILIH WARNA ======
+    // PILIH WARNA
     const colorButtons = document.querySelectorAll('.color-option');
     const colorInput   = document.getElementById('colorInput');
     const colorError   = document.getElementById('colorError');
@@ -317,7 +326,7 @@
         });
     });
 
-    // ====== PILIH SIZE ======
+    // PILIH SIZE
     const sizeButtons = document.querySelectorAll('.size-option');
     const sizeInput   = document.getElementById('sizeInput');
     const sizeError   = document.getElementById('sizeError');
@@ -335,7 +344,7 @@
         });
     });
 
-    // ====== QTY PLUS / MINUS ======
+    // QTY PLUS / MINUS
     const qtyInput   = document.getElementById('qtyInput');
     const qtyDisplay = document.getElementById('qtyDisplay');
     const btnPlus    = document.getElementById('qtyPlus');
@@ -355,7 +364,7 @@
         qtyDisplay.textContent = val;
     });
 
-    // ====== VALIDASI SEBELUM SUBMIT ======
+    // VALIDASI SEBELUM SUBMIT
     const form = document.getElementById('add-to-cart-form');
     form.addEventListener('submit', function (e) {
         let ok = true;

@@ -8,17 +8,17 @@ use Illuminate\Http\Request;
 
 class UserManagementController extends Controller
 {
-    // List semua user + store-nya
+    // List semua user dan storenya
     public function index()
     {
-        $users = User::with('store')   // asumsi relasi store() -> hasOne Store
+        $users = User::with('store')
             ->orderBy('created_at', 'desc')
             ->get();
 
         return view('admin.users', compact('users'));
     }
 
-    // Update role user (admin / member)
+    // Update role user
     public function updateRole(Request $request, User $user)
     {
         $request->validate([
@@ -31,10 +31,9 @@ class UserManagementController extends Controller
         return back()->with('success', "Role {$user->name} diubah menjadi {$user->role}.");
     }
 
-    // Optional: hapus user
+    // hapus user
     public function destroy(User $user)
     {
-        // hati-hati kalau ada relasi, tapi untuk tugas bisa cukup begini
         $user->delete();
 
         return back()->with('success', "User {$user->name} berhasil dihapus.");

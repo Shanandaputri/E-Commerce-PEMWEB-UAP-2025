@@ -19,6 +19,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Http\Controllers\Admin\StoreVerificationController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 // =====================
 // PUBLIC ROUTES
@@ -26,7 +27,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 
 // HOMEPAGE
 Route::get('/', function () {
-     Auth::logout();
+    Auth::logout();
     $categories = ProductCategory::all();
 
     $allProducts = Product::with(['productImages' => function ($q) {
@@ -44,11 +45,26 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// LIST KATEGORI
+Route::get('/categories', [CategoryController::class, 'index'])
+    ->name('categories.index');
+
+// DETAIL PRODUCT  (PUBLIC)
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->name('product.show');
 
+// DETAIL KATEGORI (PUBLIC)
 Route::get('/category/{id}', [CategoryController::class, 'show'])
     ->name('category.show');
+
+// LIVE SEARCH PRODUCT (PUBLIC)
+Route::get('/search/products', [ProductController::class, 'search'])
+    ->name('products.search');
+
+    // routes/web.php
+
+Route::get('/products/search', [ProductController::class, 'search'])
+    ->name('products.search');
 
 // =====================
 // AUTH ROUTES
@@ -120,7 +136,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
     });
 
-
     // WALLET
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
@@ -181,9 +196,8 @@ Route::middleware('role:admin')
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
 
         // VERIFIKASI TOKO
         Route::get('/verification', [StoreVerificationController::class, 'index'])

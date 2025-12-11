@@ -1,4 +1,3 @@
-{{-- resources/views/seller/dashboard.blade.php --}}
 @extends('seller.layouts.app')
 
 @section('title', 'Dashboard Seller')
@@ -27,7 +26,7 @@
         </div>
     </div>
 
-    {{-- card besar: pesanan terbaru --}}
+    {{-- pesanan terbaru --}}
     <div class="bg-white border border-gray-100 rounded-2xl shadow-sm">
         <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
             <h2 class="text-sm font-semibold text-gray-800">
@@ -50,7 +49,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{-- dummy data --}}
+                {{-- dummy --}}
                 <tr class="border-t border-gray-100">
                     <td class="py-3">#ORD-0012</td>
                     <td class="py-3">JEANS ZW WIDE LEG TIRO MD</td>

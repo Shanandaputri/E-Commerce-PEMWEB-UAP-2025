@@ -1,4 +1,3 @@
-{{-- resources/views/seller/products/index.blade.php --}}
 @extends('seller.layouts.app')
 
 @section('title', 'Produk Toko')

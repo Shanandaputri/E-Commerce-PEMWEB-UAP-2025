@@ -13,14 +13,12 @@ class ProductImageSeeder extends Seeder
         $produkPerKategori = 3;
         $fotoPerProduk     = 3;
 
-        $totalProduk = $jumlahKategori * $produkPerKategori; // 15
+        $totalProduk = $jumlahKategori * $produkPerKategori;
 
         for ($product = 1; $product <= $totalProduk; $product++) {
 
-            // kategori sekarang (1..5)
             $kategori = ceil($product / $produkPerKategori);
 
-            // urutan produk dalam kategori (1..3)
             $produkKe = $product % $produkPerKategori;
             if ($produkKe == 0) $produkKe = $produkPerKategori;
 
