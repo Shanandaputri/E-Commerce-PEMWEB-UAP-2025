@@ -69,14 +69,15 @@
                     <span>Manajemen Pesanan</span>
                 </a>
 
-                {{-- PROFIL --}}
-                <a href="{{ route('profile.edit') }}"
-                class="flex items-center gap-2 px-4 py-2.5 rounded-lg
-                {{ request()->routeIs('profile.edit') 
-                        ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-5' 
-                        : 'hover:bg-gray-50 text-gray-700' }}">
-                    <span>Profil</span>
-                </a>
+            {{-- PROFIL --}}
+            <a href="{{ route('seller.profile.index') }}"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg
+            {{ request()->routeIs('seller.profile.*')
+                    ? 'bg-gray-100 font-semibold text-blue-600 border-l-4 border-blue-600 -ml-1 pl-5'
+                    : 'hover:bg-gray-50 text-gray-700' }}">
+                <span>Profil</span>
+            </a>
+
 
             </nav>
         </div>

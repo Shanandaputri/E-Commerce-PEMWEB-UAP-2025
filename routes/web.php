@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Seller\CategoryController as SellerCategoryController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Http\Controllers\Seller\OrderController as SellerOrderController;
+use App\Http\Controllers\Seller\ProfileController as SellerProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CartController;
@@ -189,7 +190,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/orders/{transaction}', [SellerOrderController::class, 'show'])->name('orders.show');
             Route::patch('/orders/{transaction}/status', [SellerOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     
-        });
+           // SELLER PROFILE
+            Route::get('/profile', [SellerProfileController::class, 'show'])
+                ->name('profile.index');
+
+            Route::get('/profile/edit', [SellerProfileController::class, 'edit'])
+                ->name('profile.edit');
+
+            Route::put('/profile', [SellerProfileController::class, 'update'])
+                ->name('profile.update');
+       });
     
     // ADMIN
 Route::middleware('role:admin')
