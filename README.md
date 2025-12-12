@@ -1,196 +1,164 @@
-# 🛒 E-Commerce Fashion — Laravel 12
+# 🛒 SHOP.CO — E-Commerce Fashion (Laravel 12)
+**Ujian Praktikum Pemrograman Web | Fullstack E-Commerce + RBAC + Wallet & Virtual Account**
 
-**Ujian Praktikum Pemrograman Web (Fullstack E-Commerce + RBAC + Wallet & Virtual Account)**
+SHOP.CO adalah aplikasi **E-Commerce Fashion** berbasis **Laravel 12** yang menyediakan fitur belanja produk, keranjang, checkout, riwayat transaksi, serta sistem pembayaran menggunakan **E-Wallet (Saldo)** dan **Virtual Account (VA)** dengan **halaman Payment terpusat**. Aplikasi menerapkan **RBAC** untuk membatasi akses berdasarkan role pengguna.
+
+---
 
 ## 👥 Anggota Kelompok
 
-| Nama                      | NIM                 | Jobdesk                                                      |
-| ------------------------- | ------------------- | ------------------------------------------------------------ |
-| **Shananda Putri Aisyah** | **245150601111013** | Seller Page, CRUD Produk & Kategori                          |
-| **Silvia Eka Putri**      | **245150607111014** | Checkout, Wallet & Virtual Account, Payment Page, Admin Page |
+| Nama | NIM | Kontribusi |
+|---|---|---|
+| **Shananda Putri Aisyah** | **245150601111013** | Seller Dashboard, CRUD Kategori & Produk |
+| **Silvia Eka Putri** | **245150607111014** | Checkout, Wallet & VA, Payment Page, Admin Panel |
 
 ---
 
-# 📌 Deskripsi Proyek
-
-Aplikasi **E-Commerce Fashion** berbasis **Laravel 12** yang menyediakan fitur jual-beli produk fashion (contoh: pakaian, sepatu, aksesoris), lengkap dengan sistem toko/penjual, transaksi, dompet digital (*wallet*), dan pembayaran menggunakan **Virtual Account (VA)**.
-
-Aplikasi dibangun dengan konsep **fullstack**: dari tampilan pengguna, proses CRUD, validasi, hingga alur transaksi & pembayaran.
-
----
-
-# 🏗️ Teknologi yang Digunakan
-
-* **Laravel 12**
-* **PHP 8+**
-* **MySQL/MariaDB**
-* **Laravel Breeze** (autentikasi)
-* **TailwindCSS + Vite**
-* **Node.js & NPM**
+## 🧩 Teknologi
+- Laravel 12 + Laravel Breeze (Auth)
+- PHP 8+
+- MySQL/MariaDB
+- Blade + TailwindCSS + Vite
+- Node.js & NPM
 
 ---
 
-# 🚀 Fitur Utama Aplikasi
+## 🔐 RBAC (Role Based Access Control)
 
-## 🔐 1) RBAC (Role Based Access Control)
+### Role: Admin (`role:admin`)
+Akses ke:
+- Admin Dashboard
+- Verifikasi Toko (Approve/Reject)
+- Manajemen User & Store (update role, delete user)
 
-Terdapat 3 peran utama:
+### Role: Member/Customer (`role:member`)
+Akses ke:
+- Customer Dashboard
+- Cart, Checkout, History
+- Wallet (Topup & VA)
+- Store Register (mendaftar toko)
 
-* **Admin**
-* **Member (Customer)**
-* **Seller (Member yang memiliki Store)**
-
-Akses halaman dibatasi melalui middleware (role & isSeller).
-
----
-
-## 🛒 2) Customer (Member)
-
-Fitur yang disediakan:
-
-* **Homepage produk** + filter kategori
-* **Detail produk** (gambar, toko, ulasan jika ada)
-* **Checkout** + pilih metode pembayaran (**Wallet / VA Transfer**)
-* **Riwayat transaksi**
-* **Topup saldo** via **VA** (wallet)
+### Role: Seller (`middleware:seller`)
+Seller adalah **member yang memiliki store** (terdaftar di tabel `stores`) dan hanya bisa akses:
+- Seller Dashboard
+- CRUD Kategori
+- CRUD Produk
+- Manajemen Order (lihat & update status)
 
 ---
 
-## 🏪 3) Seller Dashboard (Toko Fashion)
+## 🧭 Daftar Halaman & Fitur (Sesuai Route)
 
-Hanya bisa diakses oleh **member yang sudah membuat store**.
-Fitur:
+### 🌐 Public
+- `GET /` → Homepage (list produk + kategori + new arrivals + top selling)
+- `GET /categories` → List kategori
+- `GET /category/{id}` → Produk berdasarkan kategori
+- `GET /product/{slug}` → Detail produk
+- `GET /products/search?q=...` → Live search produk (AJAX)
 
-* Registrasi & manajemen toko
-* CRUD kategori produk
-* CRUD produk + multiple gambar + thumbnail
-* Profil seller/toko
+### 👤 Auth & Profile (Breeze)
+- Login/Register/Forgot/Reset/Verify Email (dari Breeze)
+- `GET /profile` → Edit profile
+- `PATCH /profile` → Update profile
+- `DELETE /profile` → Delete account
 
----
+### 🧑 Customer (Member)
+- `GET /customer/dashboard` → Customer dashboard
+- `GET /cart` → Keranjang
+- `POST /cart/add/{product}` → Add to cart
+- `PATCH /cart/{cart}` → Update quantity cart
+- `DELETE /cart/{cart}` → Delete item cart
+- `GET /checkout` → Form checkout (alamat + pilihan pembayaran)
+- `POST /checkout` → Proses checkout (buat transaction + details)
+- `GET /history` → Riwayat transaksi (selesai & dibatalkan)
+- `GET /transactions` → List transaksi
 
-## 🛡️ 4) Admin
+### 🏪 Store Register (Member)
+- `GET /store/register` → Form pendaftaran toko
+- `POST /store/register` → Simpan data store
 
-Fitur:
+### 💰 Wallet & Payment
+- `GET /wallet` → Halaman saldo / wallet
+- `GET /wallet/topup` → Form topup (generate VA)
+- `POST /wallet/topup` → Buat request topup + VA
+- `GET /payment` → Halaman payment terpusat (input VA)
+- `POST /payment/confirm` → Konfirmasi pembayaran VA (simulasi)
 
-* Verifikasi toko (approve/reject)
-* Manajemen user & store
+### 🧑‍💼 Seller (Middleware: `seller`)
+- `GET /seller/dashboard` → Seller dashboard
+- **Kategori**
+  - `GET /seller/categories` → List kategori
+  - `GET /seller/categories/create` → Create
+  - `POST /seller/categories` → Store
+  - `GET /seller/categories/{category}/edit` → Edit
+  - `PUT /seller/categories/{category}` → Update
+  - `DELETE /seller/categories/{category}` → Delete
+- **Produk**
+  - `GET /seller/products` → List produk
+  - `GET /seller/products/create` → Create
+  - `POST /seller/products` → Store
+  - `GET /seller/products/{product}/edit` → Edit
+  - `PUT /seller/products/{product}` → Update
+  - `DELETE /seller/products/{product}` → Delete
+- **Orders**
+  - `GET /seller/orders` → List order masuk
+  - `GET /seller/orders/{transaction}` → Detail order
+  - `PATCH /seller/orders/{transaction}/status` → Update status order
 
----
-
-# 💳 Sistem Pembayaran (Sesuai Challenge)
-
-## A. Wallet / Saldo (Topup via VA)
-
-**Flow:**
-
-1. Member mengajukan topup
-2. Sistem membuat **Virtual Account unik**
-3. Pembayaran dilakukan via **Payment Page**
-4. Jika valid → **saldo (user_balances) bertambah**
-
-✅ Sesuai challenge “User Wallet & VA”.
-
----
-
-## B. VA untuk Pembelian (Checkout)
-
-**Flow:**
-
-1. Checkout → sistem membuat transaksi
-2. Sistem generate **VA unik terkait transaction_id**
-3. Pembayaran dilakukan via **Payment Page**
-4. Jika valid → `transactions.payment_status = paid`
-   lalu dana masuk ke saldo toko (**store_balances**)
-
-✅ Sesuai challenge “VA Pembelian Langsung”.
-
----
-
-## ✅ Dedicated Payment Page (Terpusat)
-
-Satu halaman khusus untuk memproses:
-
-* **Topup VA**
-* **Pembelian VA**
-
-**Flow sesuai soal:**
-
-1. Input kode VA
-2. Sistem tampilkan tagihan
-3. Input nominal transfer (simulasi)
-4. Validasi nominal
-5. Jika sukses:
-
-   * Topup → tambah saldo user
-   * Pembelian → transaksi paid + tambah saldo toko
-
-✅ Ini memenuhi challenge “Halaman Pembayaran Terpusat”.
-
----
-
-# 🗄️ Database Tambahan (Sesuai Soal)
-
-Aplikasi menambahkan tabel:
-
-* `user_balances` → saldo wallet user
-* `virtual_accounts` → data VA untuk topup & transaksi
-
-✅ Sesuai requirement “wajib membuat tabel baru”.
+### 🛡️ Admin (Middleware: `role:admin`)
+- `GET /admin/dashboard` → Admin dashboard (ringkasan)
+- **Verifikasi Toko**
+  - `GET /admin/verification` → List pending stores
+  - `POST /admin/verification/{store}/approve` → Approve store
+  - `POST /admin/verification/{store}/reject` → Reject store
+- **Manajemen User & Store**
+  - `GET /admin/users` → List user + store info
+  - `PATCH /admin/users/{user}/role` → Update role user
+  - `DELETE /admin/users/{user}` → Delete user
 
 ---
 
-# 🌱 Seeder (Sesuai Minimal Requirement)
+## 💳 Sistem Pembayaran (Challenge)
 
-Seeder menyediakan data awal:
+### A) Wallet / Saldo (Topup via VA)
+Flow:
+1. User membuka `GET /wallet/topup`
+2. Sistem membuat kode VA unik untuk topup
+3. User membayar via halaman `GET /payment`
+4. Jika nominal valid → saldo user bertambah
 
-* **1 Admin**
-* **2 Member**
-* **1 Store** (milik salah satu member)
-* **5 Kategori Fashion**
-* **≥10 Produk Fashion** 
+### B) Bayar Langsung (VA untuk transaksi)
+Flow:
+1. Checkout `POST /checkout` membuat transaksi + VA untuk transaksi
+2. User membayar via `GET /payment`
+3. Jika valid → transaksi menjadi `paid`
 
-✅ Memenuhi target minimal seeder.
-
----
-
-# ⚙️ Langkah Instalasi
-
-1. `git clone <repo>`
-2. `composer install`
-3. `npm install`
-4. `cp .env.example .env` lalu set DB
-5. `php artisan key:generate`
-6. `php artisan migrate`
-7. `php artisan db:seed`
-8. `php artisan serve`
-9. `npm run dev`
+> Konfirmasi pembayaran dilakukan melalui `POST /payment/confirm` (simulasi input VA + nominal).
 
 ---
 
-# 📂 Struktur Folder
-
-```
-app/
-database/
-public/
-resources/
-routes/
-storage/
-vendor/
-README.md
-```
+## 🗄️ Database Tambahan
+- `user_balances` → menyimpan saldo wallet user
+- `virtual_accounts` → menyimpan VA untuk topup & transaksi
 
 ---
 
-# 🧑‍💻 Catatan Teknis Developer
+## 🌱 Seeder
+Seeder minimal:
+- 1 user role **admin**
+- 2 user role **member**
+- 1 store milik salah satu member
+- 5 kategori
+- ≥ 10 produk
 
-* Transaksi finansial memakai `DB::transaction()` agar aman (atomic).
-* Middleware:
+---
 
-  * `role` untuk admin/member
-  * `isSeller` untuk seller (member + punya store)
-* Penerapan clean code: pemisahan logika melalui **Service Class** untuk proses payment/wallet.
-
-
-
-
+## ⚙️ Cara Menjalankan
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve
+npm run dev
